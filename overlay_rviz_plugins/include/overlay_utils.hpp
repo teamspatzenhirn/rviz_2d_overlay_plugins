@@ -2,6 +2,7 @@
 /*********************************************************************
  * Software License Agreement (BSD License)
  *
+ *  Copyright (c) 2022, Team Spatzenhirn
  *  Copyright (c) 2014, JSK Lab
  *  All rights reserved.
  *
@@ -36,33 +37,25 @@
 #ifndef JSK_RVIZ_PLUGIN_OVERLAY_UTIL_H_
 #define JSK_RVIZ_PLUGIN_OVERLAY_UTIL_H_
 
+#include <string>
+#include <memory>
 
-#include <OGRE/OgreMaterialManager.h>
-#include <OGRE/OgreTextureManager.h>
-#include <OGRE/OgreTexture.h>
-#include <OGRE/OgreTechnique.h>
-#include <OGRE/OgreHardwarePixelBuffer.h>
-// see OGRE/OgrePrerequisites.h
-//#define OGRE_VERSION    ((OGRE_VERSION_MAJOR << 16) | (OGRE_VERSION_MINOR << 8) | OGRE_VERSION_PATCH)
-#if OGRE_VERSION < ((1 << 16) | (9 << 8) | 0)
-    #include <OGRE/OgrePanelOverlayElement.h>
-    #include <OGRE/OgreOverlayElement.h>
-    #include <OGRE/OgreOverlayContainer.h>
-    #include <OGRE/OgreOverlayManager.h>
-#else
-    #include <OGRE/Overlay/OgrePanelOverlayElement.h>
-    #include <OGRE/Overlay/OgreOverlayElement.h>
-    #include <OGRE/Overlay/OgreOverlayContainer.h>
-    #include <OGRE/Overlay/OgreOverlayManager.h>
-#endif
+#include <OgreMaterialManager.h>
+#include <OgreTextureManager.h>
+#include <OgreTexture.h>
+#include <OgreTechnique.h>
+#include <OgreHardwarePixelBuffer.h>
+
+#include <Overlay/OgreOverlay.h>
+#include <Overlay/OgrePanelOverlayElement.h>
+#include <Overlay/OgreOverlayElement.h>
+#include <Overlay/OgreOverlayContainer.h>
+#include <Overlay/OgreOverlayManager.h>
 
 #include <QImage>
 #include <QColor>
 
-#include <ros/ros.h>
-
-namespace jsk_rviz_plugins
-{
+namespace overlay_rviz_plugins {
     class OverlayObject;
 
     class ScopedPixelBuffer
@@ -88,26 +81,23 @@ namespace jsk_rviz_plugins
     class OverlayObject
     {
       public:
-#if ROS_VERSION_MINIMUM(1,12,0)
-        typedef std::shared_ptr<OverlayObject> Ptr;
-#else
-        typedef boost::shared_ptr<OverlayObject> Ptr;
-#endif
+        using SharedPtr = std::shared_ptr<OverlayObject>;
 
         OverlayObject(const std::string& name);
         virtual ~OverlayObject();
 
-        virtual std::string getName();
+        virtual std::string getName() const;
         virtual void hide();
         virtual void show();
-        virtual bool isTextureReady();
+        virtual bool isTextureReady() const;
         virtual void updateTextureSize(unsigned int width, unsigned int height);
         virtual ScopedPixelBuffer getBuffer();
         virtual void setPosition(double left, double top);
         virtual void setDimensions(double width, double height);
-        virtual bool isVisible();
-        virtual unsigned int getTextureWidth();
-        virtual unsigned int getTextureHeight();
+        virtual bool isVisible() const;
+        virtual unsigned int getTextureWidth() const;
+        virtual unsigned int getTextureHeight() const;
+
       protected:
         const std::string name_;
         Ogre::Overlay* overlay_;

@@ -2,6 +2,7 @@
 /*********************************************************************
  * Software License Agreement (BSD License)
  *
+ *  Copyright (c) 2022, Team Spatzenhirn
  *  Copyright (c) 2014, JSK Lab
  *  All rights reserved.
  *
@@ -33,10 +34,11 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-#include "overlay_utils.h"
-#include <ros/ros.h>
+#include "overlay_utils.hpp"
 
-namespace jsk_rviz_plugins
+#include <rviz_common/logging.hpp>
+
+namespace overlay_rviz_plugins
 {
     ScopedPixelBuffer::ScopedPixelBuffer(Ogre::HardwarePixelBufferSharedPtr pixel_buffer):
         pixel_buffer_(pixel_buffer)
@@ -104,19 +106,19 @@ namespace jsk_rviz_plugins
         overlay_->add2D(panel_);
     }
 
-    OverlayObject::~OverlayObject()
-    {
-        hide();
-        panel_material_->unload();
-        Ogre::MaterialManager::getSingleton().remove(panel_material_->getName());
-        // Ogre::OverlayManager* mOverlayMgr = Ogre::OverlayManager::getSingletonPtr();
-        // mOverlayMgr->destroyOverlayElement(panel_);
-        //delete panel_;
-        //delete overlay_;
+    OverlayObject::~OverlayObject() {
+        Ogre::OverlayManager *mOverlayMgr = Ogre::OverlayManager::getSingletonPtr();
+        if (mOverlayMgr) {
+            mOverlayMgr->destroyOverlayElement(panel_);
+            mOverlayMgr->destroy(overlay_);
+        }
+        if (panel_material_) {
+            panel_material_->unload();
+            Ogre::MaterialManager::getSingleton().remove(panel_material_->getName());
+        }
     }
 
-    std::string OverlayObject::getName()
-    {
+    std::string OverlayObject::getName() const {
         return name_;
     }
 
@@ -134,20 +136,19 @@ namespace jsk_rviz_plugins
         }
     }
 
-    bool OverlayObject::isTextureReady()
-    {
-        return !texture_.isNull();
+    bool OverlayObject::isTextureReady() const {
+        return texture_ != nullptr;
     }
 
     void OverlayObject::updateTextureSize(unsigned int width, unsigned int height)
     {
         const std::string texture_name = name_ + "Texture";
         if (width == 0) {
-            ROS_WARN("[OverlayObject] width=0 is specified as texture size");
+            RVIZ_COMMON_LOG_WARNING_STREAM("[OverlayObject] width=0 is specified as texture size");
             width = 1;
         }
         if (height == 0) {
-            ROS_WARN("[OverlayObject] height=0 is specified as texture size");
+            RVIZ_COMMON_LOG_WARNING_STREAM("[OverlayObject] height=0 is specified as texture size");
             height = 1;
         }
         if (!isTextureReady() ||
@@ -195,13 +196,11 @@ namespace jsk_rviz_plugins
         panel_->setDimensions(width, height);
     }
 
-    bool OverlayObject::isVisible()
-    {
+    bool OverlayObject::isVisible() const {
         return overlay_->isVisible();
     }
 
-    unsigned int OverlayObject::getTextureWidth()
-    {
+    unsigned int OverlayObject::getTextureWidth() const {
         if (isTextureReady()) {
             return texture_->getWidth();
         }
@@ -210,8 +209,7 @@ namespace jsk_rviz_plugins
         }
     }
 
-    unsigned int OverlayObject::getTextureHeight()
-    {
+    unsigned int OverlayObject::getTextureHeight() const {
         if (isTextureReady()) {
             return texture_->getHeight();
         }
