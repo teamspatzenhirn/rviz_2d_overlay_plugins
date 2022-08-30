@@ -3,10 +3,13 @@
 <package format="3">
     <name>overlay_rviz_plugins</name>
     <version>1.0.0</version>
-    <description>RViz2 plugin for a text overlay in the 3D view. Mainly a ROS2 port of the JSK overlay plugin
+    <description>RViz2 plugin for 2D overlays in the 3D view. Mainly a ROS2 port of the JSK overlay plugin
         (https://github.com/jsk-ros-pkg/jsk_visualization).
     </description>
     <maintainer email="team-spatzenhirn@uni-ulm.de">Team Spatzenhirn</maintainer>
+    <maintainer email="jonas@jonasotto.com">Jonas Otto</maintainer>
+    <maintainer email="dominik.authaler@uni-ulm.de">Dominik Authaler</maintainer>
+
     <license>BSD-3-Clause</license>
 
     <depend>overlay_rviz_msgs</depend>
