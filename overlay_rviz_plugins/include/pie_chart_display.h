@@ -2,6 +2,7 @@
 /*********************************************************************
  * Software License Agreement (BSD License)
  *
+ *  Copyright (c) 2022, Team Spatzenhirn
  *  Copyright (c) 2014, JSK Lab
  *  All rights reserved.
  *
@@ -34,24 +35,23 @@
  *********************************************************************/
 #ifndef JSK_RVIZ_PLUGINS_PIE_CHART_DISPLAY_H_
 #define JSK_RVIZ_PLUGINS_PIE_CHART_DISPLAY_H_
-#include "std_msgs/Float32.h"
+#include <std_msgs/msg/float32.hpp>
 #ifndef Q_MOC_RUN
-#include <rviz/display.h>
-#include "overlay_utils.h"
-#include <OGRE/OgreColourValue.h>
-#include <OGRE/OgreTexture.h>
-#include <OGRE/OgreMaterial.h>
-#include <rviz/properties/int_property.h>
-#include <rviz/properties/float_property.h>
-#include <rviz/properties/color_property.h>
-#include <rviz/properties/bool_property.h>
-#include <rviz/properties/ros_topic_property.h>
+#include <rviz_common/ros_topic_display.hpp>
+#include "overlay_utils.hpp"
+#include <OgreColourValue.h>
+#include <OgreTexture.h>
+#include <OgreMaterial.h>
+#include <rviz_common/properties/int_property.hpp>
+#include <rviz_common/properties/float_property.hpp>
+#include <rviz_common/properties/color_property.hpp>
+#include <rviz_common/properties/color_property.hpp>
 #endif
 
-namespace jsk_rviz_plugins
+namespace overlay_rviz_plugins
 {
   class PieChartDisplay
-    : public rviz::Display
+    : public rviz_common::RosTopicDisplay<std_msgs::msg::Float32>
   {
     Q_OBJECT
   public:
@@ -66,38 +66,32 @@ namespace jsk_rviz_plugins
     virtual int getY() { return top_; };
 
   protected:
-    virtual void subscribe();
-    virtual void unsubscribe();
     virtual void onEnable();
     virtual void onDisable();
     virtual void onInitialize();
-    virtual void processMessage(const std_msgs::Float32::ConstPtr& msg);
+    virtual void processMessage(std_msgs::msg::Float32::ConstSharedPtr msg);
     virtual void drawPlot(double val);
     virtual void update(float wall_dt, float ros_dt);
     // properties
-    rviz::RosTopicProperty* update_topic_property_;
-    rviz::IntProperty* size_property_;
-    rviz::IntProperty* left_property_;
-    rviz::IntProperty* top_property_;
-    rviz::ColorProperty* fg_color_property_;
-    rviz::ColorProperty* bg_color_property_;
-    rviz::ColorProperty* text_color_property_;
-    rviz::FloatProperty* fg_alpha_property_;
-    rviz::FloatProperty* fg_alpha2_property_;
-    rviz::FloatProperty* bg_alpha_property_;
-    rviz::FloatProperty* text_alpha_property_;
-    rviz::IntProperty* text_size_property_;
-    rviz::FloatProperty* max_value_property_;
-    rviz::FloatProperty* min_value_property_;
-    rviz::BoolProperty* show_caption_property_;
-    rviz::BoolProperty* auto_color_change_property_;
-    rviz::ColorProperty* max_color_property_;
-    rviz::ColorProperty* med_color_property_;
-    rviz::FloatProperty* max_color_threshold_property_;
-    rviz::FloatProperty* med_color_threshold_property_;
-    rviz::BoolProperty* clockwise_rotate_property_;
+    rviz_common::properties::IntProperty* size_property_;
+    rviz_common::properties::IntProperty* left_property_;
+    rviz_common::properties::IntProperty* top_property_;
+    rviz_common::properties::ColorProperty* fg_color_property_;
+    rviz_common::properties::ColorProperty* bg_color_property_;
+    rviz_common::properties::FloatProperty* fg_alpha_property_;
+    rviz_common::properties::FloatProperty* fg_alpha2_property_;
+    rviz_common::properties::FloatProperty* bg_alpha_property_;
+    rviz_common::properties::IntProperty* text_size_property_;
+    rviz_common::properties::FloatProperty* max_value_property_;
+    rviz_common::properties::FloatProperty* min_value_property_;
+    rviz_common::properties::BoolProperty* show_caption_property_;
+    rviz_common::properties::BoolProperty* auto_color_change_property_;
+    rviz_common::properties::ColorProperty* max_color_property_;
+    rviz_common::properties::ColorProperty* med_color_property_;
+    rviz_common::properties::FloatProperty* max_color_threshold_property_;
+    rviz_common::properties::FloatProperty* med_color_threshold_property_;
+    rviz_common::properties::BoolProperty* clockwise_rotate_property_;
 
-    ros::Subscriber sub_;
     int left_;
     int top_;
     uint16_t texture_size_;
@@ -119,13 +113,12 @@ namespace jsk_rviz_plugins
     float data_;
     bool update_required_;
     bool first_time_;
-    OverlayObject::Ptr overlay_;
+    overlay_rviz_plugins::OverlayObject::SharedPtr overlay_;
     bool clockwise_rotate_;
     
-    boost::mutex mutex_;
+    std::mutex mutex_;
                        
   protected Q_SLOTS:
-    void updateTopic();
     void updateSize();
     void updateTop();
     void updateLeft();
