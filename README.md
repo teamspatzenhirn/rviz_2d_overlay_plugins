@@ -1,4 +1,4 @@
-# rviz2_text_overlay_plugin
+# overlay_rviz_plugins
 
 Plugins and message definitions for displaying 2D overlays over the
 RViz2 3D scene.
