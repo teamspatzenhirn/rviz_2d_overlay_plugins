@@ -33,40 +33,43 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
-#ifndef JSK_RVIZ_PLUGIN_OVERLAY_TEXT_DISPLAY_H_
-#define JSK_RVIZ_PLUGIN_OVERLAY_TEXT_DISPLAY_H_
+#ifndef OVERLAY_RVIZ_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
+#define OVERLAY_RVIZ_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
 
 #include "overlay_rviz_msgs/msg/overlay_text.hpp"
 #ifndef Q_MOC_RUN
-    #include <rviz_common/ros_topic_display.hpp>
-    #include "overlay_utils.hpp"
     #include <OgreColourValue.h>
     #include <OgreMaterial.h>
-    #include <std_msgs/msg/color_rgba.h>
-    #include <rviz_common/properties/ros_topic_property.hpp>
     #include <rviz_common/properties/bool_property.hpp>
-    #include <rviz_common/properties/int_property.hpp>
-    #include <rviz_common/properties/float_property.hpp>
-    #include <rviz_common/properties/enum_property.hpp>
     #include <rviz_common/properties/color_property.hpp>
+    #include <rviz_common/properties/enum_property.hpp>
+    #include <rviz_common/properties/float_property.hpp>
+    #include <rviz_common/properties/int_property.hpp>
+    #include <rviz_common/properties/ros_topic_property.hpp>
+    #include <rviz_common/ros_topic_display.hpp>
+    #include <std_msgs/msg/color_rgba.h>
+
+    #include "overlay_utils.hpp"
 #endif
 
-namespace overlay_rviz_plugins
-{
-    class OverlayTextDisplay
-        : public rviz_common::RosTopicDisplay<overlay_rviz_msgs::msg::OverlayText>
-    {
+namespace overlay_rviz_plugins {
+    class OverlayTextDisplay : public rviz_common::RosTopicDisplay<overlay_rviz_msgs::msg::OverlayText> {
         Q_OBJECT
       public:
         OverlayTextDisplay();
         virtual ~OverlayTextDisplay();
+
         // methods for OverlayPickerTool
         virtual bool isInRegion(int x, int y);
         virtual void movePosition(int x, int y);
         virtual void setPosition(int x, int y);
-        virtual int getX() const { return left_; };
-        virtual int getY() const { return top_; };
-        
+        virtual int getX() const {
+            return left_;
+        };
+        virtual int getY() const {
+            return top_;
+        };
+
       protected:
         overlay_rviz_plugins::OverlayObject::SharedPtr overlay_;
 
@@ -94,22 +97,24 @@ namespace overlay_rviz_plugins
         virtual void update(float wall_dt, float ros_dt) override;
 
         bool require_update_texture_;
-        rviz_common::properties::BoolProperty* overtake_position_properties_property_;
-        rviz_common::properties::BoolProperty* overtake_fg_color_properties_property_;
-        rviz_common::properties::BoolProperty* overtake_bg_color_properties_property_;
-        rviz_common::properties::BoolProperty* align_bottom_property_;
-        rviz_common::properties::BoolProperty* invert_shadow_property_;
-        rviz_common::properties::IntProperty* top_property_;
-        rviz_common::properties::IntProperty* left_property_;
-        rviz_common::properties::IntProperty* width_property_;
-        rviz_common::properties::IntProperty* height_property_;
-        rviz_common::properties::IntProperty* text_size_property_;
-        rviz_common::properties::IntProperty* line_width_property_;
-        rviz_common::properties::ColorProperty* bg_color_property_;
-        rviz_common::properties::FloatProperty* bg_alpha_property_;
-        rviz_common::properties::ColorProperty* fg_color_property_;
-        rviz_common::properties::FloatProperty* fg_alpha_property_;
-        rviz_common::properties::EnumProperty* font_property_;
+        // properties are raw pointers since they are owned by Qt
+        rviz_common::properties::BoolProperty *overtake_position_properties_property_;
+        rviz_common::properties::BoolProperty *overtake_fg_color_properties_property_;
+        rviz_common::properties::BoolProperty *overtake_bg_color_properties_property_;
+        rviz_common::properties::BoolProperty *align_bottom_property_;
+        rviz_common::properties::BoolProperty *invert_shadow_property_;
+        rviz_common::properties::IntProperty *top_property_;
+        rviz_common::properties::IntProperty *left_property_;
+        rviz_common::properties::IntProperty *width_property_;
+        rviz_common::properties::IntProperty *height_property_;
+        rviz_common::properties::IntProperty *text_size_property_;
+        rviz_common::properties::IntProperty *line_width_property_;
+        rviz_common::properties::ColorProperty *bg_color_property_;
+        rviz_common::properties::FloatProperty *bg_alpha_property_;
+        rviz_common::properties::ColorProperty *fg_color_property_;
+        rviz_common::properties::FloatProperty *fg_alpha_property_;
+        rviz_common::properties::EnumProperty *font_property_;
+
       protected Q_SLOTS:
         void updateOvertakePositionProperties();
         void updateOvertakeFGColorProperties();
@@ -127,9 +132,10 @@ namespace overlay_rviz_plugins
         void updateBGAlpha();
         void updateFont();
         void updateLineWidth();
+
       private:
         void processMessage(overlay_rviz_msgs::msg::OverlayText::ConstSharedPtr msg) override;
     };
-}
+} // namespace overlay_rviz_plugins
 
-#endif
+#endif // OVERLAY_RVIZ_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP

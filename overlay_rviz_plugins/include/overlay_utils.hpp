@@ -34,56 +34,50 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-#ifndef JSK_RVIZ_PLUGIN_OVERLAY_UTIL_H_
-#define JSK_RVIZ_PLUGIN_OVERLAY_UTIL_H_
+#ifndef OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
+#define OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
 
-#include <string>
-#include <memory>
-
-#include <OgreMaterialManager.h>
-#include <OgreTextureManager.h>
-#include <OgreTexture.h>
-#include <OgreTechnique.h>
 #include <OgreHardwarePixelBuffer.h>
-
+#include <OgreMaterialManager.h>
+#include <OgreTechnique.h>
+#include <OgreTexture.h>
+#include <OgreTextureManager.h>
 #include <Overlay/OgreOverlay.h>
-#include <Overlay/OgrePanelOverlayElement.h>
-#include <Overlay/OgreOverlayElement.h>
 #include <Overlay/OgreOverlayContainer.h>
+#include <Overlay/OgreOverlayElement.h>
 #include <Overlay/OgreOverlayManager.h>
-
-#include <QImage>
+#include <Overlay/OgrePanelOverlayElement.h>
 #include <QColor>
+#include <QImage>
+#include <memory>
+#include <string>
 
 namespace overlay_rviz_plugins {
     class OverlayObject;
 
-    class ScopedPixelBuffer
-    {
+    class ScopedPixelBuffer {
       public:
         ScopedPixelBuffer(Ogre::HardwarePixelBufferSharedPtr pixel_buffer);
         virtual ~ScopedPixelBuffer();
         virtual Ogre::HardwarePixelBufferSharedPtr getPixelBuffer();
         virtual QImage getQImage(unsigned int width, unsigned int height);
-        virtual QImage getQImage(OverlayObject& overlay);
-        virtual QImage getQImage(unsigned int width, unsigned int height, QColor& bg_color);
-        virtual QImage getQImage(OverlayObject& overlay, QColor& bg_color);
+        virtual QImage getQImage(OverlayObject &overlay);
+        virtual QImage getQImage(unsigned int width, unsigned int height, QColor &bg_color);
+        virtual QImage getQImage(OverlayObject &overlay, QColor &bg_color);
+
       protected:
         Ogre::HardwarePixelBufferSharedPtr pixel_buffer_;
-      private:
-
     };
 
 
     // this is a class for put overlay object on rviz 3D panel.
     // This class suppose to be instantiated in onInitialize method
     // of rviz::Display class.
-    class OverlayObject
-    {
+    class OverlayObject {
       public:
         using SharedPtr = std::shared_ptr<OverlayObject>;
 
-        OverlayObject(const std::string& name);
+        OverlayObject(const std::string &name);
         virtual ~OverlayObject();
 
         virtual std::string getName() const;
@@ -100,18 +94,11 @@ namespace overlay_rviz_plugins {
 
       protected:
         const std::string name_;
-        Ogre::Overlay* overlay_;
-        Ogre::PanelOverlayElement* panel_;
+        Ogre::Overlay *overlay_;
+        Ogre::PanelOverlayElement *panel_;
         Ogre::MaterialPtr panel_material_;
         Ogre::TexturePtr texture_;
-
-      private:
-
     };
+} // namespace overlay_rviz_plugins
 
-    // Ogre::Overlay* createOverlay(std::string name);
-    // Ogre::PanelOverlayElement* createOverlayPanel(Ogre::Overlay* overlay);
-    // Ogre::MaterialPtr createOverlayMaterial(Ogre::Overlay* overlay);
-}
-
-#endif
+#endif // OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
