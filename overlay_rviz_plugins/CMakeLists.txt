@@ -14,6 +14,7 @@ find_package(std_msgs REQUIRED)
 set(headers_to_moc
         include/overlay_text_display.hpp
         include/overlay_utils.hpp
+        include/pie_chart_display.h
         )
 
 foreach (header "${headers_to_moc}")
@@ -23,6 +24,7 @@ endforeach ()
 set(display_source_files
         src/overlay_text_display.cpp
         src/overlay_utils.cpp
+        src/pie_chart_display.cpp
         )
 
 add_library(${PROJECT_NAME} SHARED
@@ -59,6 +61,7 @@ ament_target_dependencies(${PROJECT_NAME}
         rviz_common
         rviz_rendering
         overlay_rviz_msgs
+        std_msgs
         )
 
 ament_export_include_directories(include)
