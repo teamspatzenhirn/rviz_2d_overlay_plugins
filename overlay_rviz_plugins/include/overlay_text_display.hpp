@@ -95,6 +95,7 @@ namespace overlay_rviz_plugins {
         virtual void onEnable() override;
         virtual void onDisable() override;
         virtual void update(float wall_dt, float ros_dt) override;
+        virtual void reset() override;
 
         bool require_update_texture_;
         // properties are raw pointers since they are owned by Qt

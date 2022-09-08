@@ -238,6 +238,14 @@ namespace overlay_rviz_plugins {
         require_update_texture_ = false;
     }
 
+    void OverlayTextDisplay::reset() {
+        RTDClass::reset();
+
+        if (overlay_) {
+            overlay_->hide();
+        }
+    }
+
     void OverlayTextDisplay::processMessage(overlay_rviz_msgs::msg::OverlayText::ConstSharedPtr msg) {
         if (!isEnabled()) {
             return;
