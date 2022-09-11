@@ -2,6 +2,9 @@
 Changelog for package overlay_rviz_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.0.0 (2022-08-30)
 ------------------
 * Create OverlayText message (currently same as jsk_rviz_plugins)
