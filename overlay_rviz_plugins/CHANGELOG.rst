@@ -2,8 +2,8 @@
 Changelog for package overlay_rviz_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2022-09-11)
+------------------
 * implemented reset
 * port pie chart plugin to ROS2
 * Contributors: Dominik, Jonas Otto
