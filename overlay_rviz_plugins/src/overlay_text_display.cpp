@@ -267,12 +267,37 @@ namespace overlay_rviz_plugins {
 
         // store message for update method
         text_ = msg->text;
+        // TODO: maybe allow overriding the anchor via the properties
+        switch (msg->horizontal_alignment) {
+            case overlay_rviz_msgs::msg::OverlayText::LEFT:
+                horizontal_alignment_ = HorizontalAlignment::LEFT;
+                break;
+            case overlay_rviz_msgs::msg::OverlayText::CENTER:
+                horizontal_alignment_ = HorizontalAlignment::CENTER;
+                break;
+            case overlay_rviz_msgs::msg::OverlayText::RIGHT:
+                horizontal_alignment_ = HorizontalAlignment::RIGHT;
+                break;
+        }
+
+        switch (msg->vertical_alignment) {
+            case overlay_rviz_msgs::msg::OverlayText::BOTTOM:
+                vertical_alignment_ = VerticalAlignment::BOTTOM;
+                break;
+            case overlay_rviz_msgs::msg::OverlayText::CENTER:
+                vertical_alignment_ = VerticalAlignment::CENTER;
+                break;
+            case overlay_rviz_msgs::msg::OverlayText::TOP:
+                vertical_alignment_ = VerticalAlignment::TOP;
+                break;
+        }
+
         if (!overtake_position_properties_) {
             texture_width_ = msg->width;
             texture_height_ = msg->height;
             text_size_ = msg->text_size;
-            left_ = msg->left;
-            top_ = msg->top;
+            horizontal_dist_ = msg->horizontal_distance;
+            vertical_dist_ = msg->vertical_distance;
         }
         if (!overtake_bg_color_properties_)
             bg_color_ = QColor(msg->bg_color.r * 255.0, msg->bg_color.g * 255.0, msg->bg_color.b * 255.0,
@@ -284,7 +309,7 @@ namespace overlay_rviz_plugins {
             line_width_ = msg->line_width;
         }
         if (overlay_) {
-            overlay_->setPosition(left_, top_);
+            overlay_->setPosition(horizontal_dist_, vertical_dist_, horizontal_alignment_, vertical_alignment_);
         }
         require_update_texture_ = true;
     }
@@ -372,14 +397,14 @@ namespace overlay_rviz_plugins {
 
 
     void OverlayTextDisplay::updateTop() {
-        top_ = top_property_->getInt();
+        vertical_dist_ = top_property_->getInt();
         if (overtake_position_properties_) {
             require_update_texture_ = true;
         }
     }
 
     void OverlayTextDisplay::updateLeft() {
-        left_ = left_property_->getInt();
+        horizontal_dist_ = left_property_->getInt();
         if (overtake_position_properties_) {
             require_update_texture_ = true;
         }
@@ -461,12 +486,15 @@ namespace overlay_rviz_plugins {
     }
 
     bool OverlayTextDisplay::isInRegion(int x, int y) {
-        return (top_ < y && top_ + texture_height_ > y && left_ < x && left_ + texture_width_ > x);
+        // FIXME: currently not implemented because it is only needed for the overlay picker tool and
+        //        the old implementation doesn't work with the new alignment possibilities.
+        //        Furthermore, there is currently no plan for porting the picker tool.
+        return false;
     }
 
     void OverlayTextDisplay::movePosition(int x, int y) {
-        top_ = y;
-        left_ = x;
+        vertical_dist_ = y;
+        horizontal_dist_ = x;
     }
 
     void OverlayTextDisplay::setPosition(int x, int y) {

@@ -64,10 +64,10 @@ namespace overlay_rviz_plugins {
         virtual void movePosition(int x, int y);
         virtual void setPosition(int x, int y);
         virtual int getX() const {
-            return left_;
+            return horizontal_dist_;
         };
         virtual int getY() const {
-            return top_;
+            return vertical_dist_;
         };
 
       protected:
@@ -88,8 +88,10 @@ namespace overlay_rviz_plugins {
         std::string text_;
         QStringList font_families_;
         std::string font_;
-        int left_;
-        int top_;
+        int horizontal_dist_;
+        int vertical_dist_;
+        HorizontalAlignment horizontal_alignment_;
+        VerticalAlignment vertical_alignment_;
 
         virtual void onInitialize() override;
         virtual void onEnable() override;

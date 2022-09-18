@@ -163,7 +163,44 @@ namespace overlay_rviz_plugins {
         }
     }
 
-    void OverlayObject::setPosition(double left, double top) {
+    void OverlayObject::setPosition(double hor_dist, double ver_dist, HorizontalAlignment hor_alignment,
+                                    VerticalAlignment ver_alignment) {
+        // ogre position is always based on the top left corner of the panel, while our position input
+        // depends on the chosen alignment, i.e. if the horizontal alignment is right, increasing the horizontal
+        // dist moves the panel to the left (further away from the right border)
+        double left = 0;
+        double top = 0;
+
+        switch (hor_alignment) {
+            case HorizontalAlignment::LEFT:
+                panel_->setHorizontalAlignment(Ogre::GuiHorizontalAlignment::GHA_LEFT);
+                left = hor_dist;
+                break;
+            case HorizontalAlignment::CENTER:
+                panel_->setHorizontalAlignment(Ogre::GuiHorizontalAlignment::GHA_CENTER);
+                left = hor_dist - panel_->getWidth() / 2;
+                break;
+            case HorizontalAlignment::RIGHT:
+                panel_->setHorizontalAlignment(Ogre::GuiHorizontalAlignment::GHA_RIGHT);
+                left = -hor_dist - panel_->getWidth();
+                break;
+        }
+
+        switch (ver_alignment) {
+            case VerticalAlignment::BOTTOM:
+                panel_->setVerticalAlignment(Ogre::GuiVerticalAlignment::GVA_BOTTOM);
+                top = -ver_dist - panel_->getHeight();
+                break;
+            case VerticalAlignment::CENTER:
+                panel_->setVerticalAlignment(Ogre::GuiVerticalAlignment::GVA_CENTER);
+                top = ver_dist - panel_->getHeight() / 2;
+                break;
+            case VerticalAlignment::TOP:
+                panel_->setVerticalAlignment(Ogre::GuiVerticalAlignment::GVA_TOP);
+                top = ver_dist;
+                break;
+        }
+
         panel_->setPosition(left, top);
     }
 
