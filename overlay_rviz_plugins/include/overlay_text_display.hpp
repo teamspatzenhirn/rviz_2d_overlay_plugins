@@ -95,8 +95,10 @@ namespace overlay_rviz_plugins {
         rviz_common::properties::BoolProperty *overtake_bg_color_properties_property_;
         rviz_common::properties::BoolProperty *align_bottom_property_;
         rviz_common::properties::BoolProperty *invert_shadow_property_;
-        rviz_common::properties::IntProperty *top_property_;
-        rviz_common::properties::IntProperty *left_property_;
+        rviz_common::properties::IntProperty *hor_dist_property_;
+        rviz_common::properties::IntProperty *ver_dist_property_;
+        rviz_common::properties::EnumProperty *hor_alignment_property_;
+        rviz_common::properties::EnumProperty *ver_alignment_property_;
         rviz_common::properties::IntProperty *width_property_;
         rviz_common::properties::IntProperty *height_property_;
         rviz_common::properties::IntProperty *text_size_property_;
@@ -113,8 +115,10 @@ namespace overlay_rviz_plugins {
         void updateOvertakeBGColorProperties();
         void updateAlignBottom();
         void updateInvertShadow();
-        void updateTop();
-        void updateLeft();
+        void updateHorizontalDistance();
+        void updateVerticalDistance();
+        void updateHorizontalAlignment();
+        void updateVerticalAlignment();
         void updateWidth();
         void updateHeight();
         void updateTextSize();
