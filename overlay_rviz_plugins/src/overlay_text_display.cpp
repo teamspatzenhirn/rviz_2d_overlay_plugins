@@ -485,23 +485,6 @@ namespace overlay_rviz_plugins {
         }
     }
 
-    bool OverlayTextDisplay::isInRegion(int x, int y) {
-        // FIXME: currently not implemented because it is only needed for the overlay picker tool and
-        //        the old implementation doesn't work with the new alignment possibilities.
-        //        Furthermore, there is currently no plan for porting the picker tool.
-        return false;
-    }
-
-    void OverlayTextDisplay::movePosition(int x, int y) {
-        vertical_dist_ = y;
-        horizontal_dist_ = x;
-    }
-
-    void OverlayTextDisplay::setPosition(int x, int y) {
-        top_property_->setValue(y);
-        left_property_->setValue(x);
-    }
-
 } // namespace overlay_rviz_plugins
 
 #include <pluginlib/class_list_macros.hpp>

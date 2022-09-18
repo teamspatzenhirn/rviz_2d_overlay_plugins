@@ -59,17 +59,6 @@ namespace overlay_rviz_plugins {
         OverlayTextDisplay();
         virtual ~OverlayTextDisplay();
 
-        // methods for OverlayPickerTool
-        virtual bool isInRegion(int x, int y);
-        virtual void movePosition(int x, int y);
-        virtual void setPosition(int x, int y);
-        virtual int getX() const {
-            return horizontal_dist_;
-        };
-        virtual int getY() const {
-            return vertical_dist_;
-        };
-
       protected:
         overlay_rviz_plugins::OverlayObject::SharedPtr overlay_;
 
