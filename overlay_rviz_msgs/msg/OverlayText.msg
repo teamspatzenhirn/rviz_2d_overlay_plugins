@@ -14,10 +14,14 @@ int32 width
 int32 height
 int32 left
 int32 top
-int32 horizontal_distance # horizontal distance between the two anchor points
-int32 vertical_distance # vertical distance between the two anchor points
-uint8 horizontal_alignment # applied to overlay and parent frame
-uint8 vertical_alignment # applied to overlay and parent frame
+# Position: Positive values move the overlay towards the center of the window,
+#  for center alignment positive values move the overlay towards the bottom right
+int32 horizontal_distance # Horizontal distance from left/right border or center, depending on alignment
+int32 vertical_distance # Vertical distance between from top/bottom border or center, depending on alignment
+
+# Alignment of the overlay withing RVIZ
+uint8 horizontal_alignment # one of LEFT, CENTER, RIGHT
+uint8 vertical_alignment # one of TOP, CENTER, BOTTOM
 
 std_msgs/ColorRGBA bg_color
 
