@@ -48,7 +48,7 @@
 #include <rviz_common/properties/color_property.hpp>
 #endif
 
-namespace overlay_rviz_plugins
+namespace rviz_2d_overlay_plugins
 {
   class PieChartDisplay
     : public rviz_common::RosTopicDisplay<std_msgs::msg::Float32>
@@ -113,7 +113,7 @@ namespace overlay_rviz_plugins
     float data_;
     bool update_required_;
     bool first_time_;
-    overlay_rviz_plugins::OverlayObject::SharedPtr overlay_;
+    rviz_2d_overlay_plugins::OverlayObject::SharedPtr overlay_;
     bool clockwise_rotate_;
     
     std::mutex mutex_;

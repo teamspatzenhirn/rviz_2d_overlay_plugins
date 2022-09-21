@@ -50,7 +50,7 @@
 #include <rviz_rendering/render_system.hpp>
 #include <sstream>
 
-namespace overlay_rviz_plugins {
+namespace rviz_2d_overlay_plugins {
     OverlayTextDisplay::OverlayTextDisplay() :
         texture_width_(0),
         texture_height_(0),
@@ -85,15 +85,15 @@ namespace overlay_rviz_plugins {
         hor_alignment_property_ =
                 new rviz_common::properties::EnumProperty("hor_alignment", "left", "horizontal alignment of the overlay",
                                                           this, SLOT(updateHorizontalAlignment()));
-        hor_alignment_property_->addOption("left", overlay_rviz_msgs::msg::OverlayText::LEFT);
-        hor_alignment_property_->addOption("center", overlay_rviz_msgs::msg::OverlayText::CENTER);
-        hor_alignment_property_->addOption("right", overlay_rviz_msgs::msg::OverlayText::RIGHT);
+        hor_alignment_property_->addOption("left", rviz_2d_overlay_msgs::msg::OverlayText::LEFT);
+        hor_alignment_property_->addOption("center", rviz_2d_overlay_msgs::msg::OverlayText::CENTER);
+        hor_alignment_property_->addOption("right", rviz_2d_overlay_msgs::msg::OverlayText::RIGHT);
         ver_alignment_property_ =
                 new rviz_common::properties::EnumProperty("ver_alignment", "top", "vertical alignment of the overlay",
                                                           this, SLOT(updateVerticalAlignment()));
-        ver_alignment_property_->addOption("top", overlay_rviz_msgs::msg::OverlayText::TOP);
-        ver_alignment_property_->addOption("center", overlay_rviz_msgs::msg::OverlayText::CENTER);
-        ver_alignment_property_->addOption("bottom", overlay_rviz_msgs::msg::OverlayText::BOTTOM);
+        ver_alignment_property_->addOption("top", rviz_2d_overlay_msgs::msg::OverlayText::TOP);
+        ver_alignment_property_->addOption("center", rviz_2d_overlay_msgs::msg::OverlayText::CENTER);
+        ver_alignment_property_->addOption("bottom", rviz_2d_overlay_msgs::msg::OverlayText::BOTTOM);
         width_property_ =
                 new rviz_common::properties::IntProperty("width", 128, "width position", this, SLOT(updateWidth()));
         width_property_->setMin(0);
@@ -187,7 +187,7 @@ namespace overlay_rviz_plugins {
 
         overlay_->updateTextureSize(texture_width_, texture_height_);
         {
-            overlay_rviz_plugins::ScopedPixelBuffer buffer = overlay_->getBuffer();
+            rviz_2d_overlay_plugins::ScopedPixelBuffer buffer = overlay_->getBuffer();
             QImage Hud = buffer.getQImage(*overlay_, bg_color_);
             QPainter painter(&Hud);
             painter.setRenderHint(QPainter::Antialiasing, true);
@@ -260,7 +260,7 @@ namespace overlay_rviz_plugins {
         }
     }
 
-    void OverlayTextDisplay::processMessage(overlay_rviz_msgs::msg::OverlayText::ConstSharedPtr msg) {
+    void OverlayTextDisplay::processMessage(rviz_2d_overlay_msgs::msg::OverlayText::ConstSharedPtr msg) {
         if (!isEnabled()) {
             return;
         }
@@ -268,13 +268,13 @@ namespace overlay_rviz_plugins {
             static int count = 0;
             std::stringstream ss;
             ss << "OverlayTextDisplayObject" << count++;
-            overlay_.reset(new overlay_rviz_plugins::OverlayObject(ss.str()));
+            overlay_.reset(new rviz_2d_overlay_plugins::OverlayObject(ss.str()));
             overlay_->show();
         }
         if (overlay_) {
-            if (msg->action == overlay_rviz_msgs::msg::OverlayText::DELETE) {
+            if (msg->action == rviz_2d_overlay_msgs::msg::OverlayText::DELETE) {
                 overlay_->hide();
-            } else if (msg->action == overlay_rviz_msgs::msg::OverlayText::ADD) {
+            } else if (msg->action == rviz_2d_overlay_msgs::msg::OverlayText::ADD) {
                 overlay_->show();
             }
         }
@@ -499,7 +499,7 @@ namespace overlay_rviz_plugins {
         }
     }
 
-} // namespace overlay_rviz_plugins
+} // namespace rviz_2d_overlay_plugins
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(overlay_rviz_plugins::OverlayTextDisplay, rviz_common::Display)
+PLUGINLIB_EXPORT_CLASS(rviz_2d_overlay_plugins::OverlayTextDisplay, rviz_common::Display)

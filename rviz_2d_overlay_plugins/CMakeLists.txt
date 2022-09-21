@@ -4,7 +4,7 @@ project(rviz_2d_overlay_plugins)
 # find dependencies
 find_package(ament_cmake REQUIRED)
 
-find_package(overlay_rviz_msgs REQUIRED)
+find_package(rviz_2d_overlay_msgs REQUIRED)
 
 find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
@@ -60,7 +60,7 @@ ament_target_dependencies(${PROJECT_NAME}
         PUBLIC
         rviz_common
         rviz_rendering
-        overlay_rviz_msgs
+        rviz_2d_overlay_msgs
         std_msgs
         )
 
@@ -86,5 +86,5 @@ install(
 )
 
 ament_package(
-        CONFIG_EXTRAS "overlay_rviz_plugins-extras.cmake"
+        CONFIG_EXTRAS "rviz_2d_overlay_plugins-extras.cmake"
 )

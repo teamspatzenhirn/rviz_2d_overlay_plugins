@@ -34,8 +34,8 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-#ifndef OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
-#define OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
+#ifndef RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_UTILS_HPP
+#define RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_UTILS_HPP
 
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreMaterialManager.h>
@@ -52,9 +52,9 @@
 #include <memory>
 #include <string>
 
-#include "overlay_rviz_msgs/msg/overlay_text.hpp"
+#include "rviz_2d_overlay_msgs/msg/overlay_text.hpp"
 
-namespace overlay_rviz_plugins {
+namespace rviz_2d_overlay_plugins {
     class OverlayObject;
 
     class ScopedPixelBuffer {
@@ -72,15 +72,15 @@ namespace overlay_rviz_plugins {
     };
 
     enum class VerticalAlignment : uint8_t {
-        CENTER = overlay_rviz_msgs::msg::OverlayText::CENTER,
-        TOP = overlay_rviz_msgs::msg::OverlayText::TOP,
-        BOTTOM = overlay_rviz_msgs::msg::OverlayText::BOTTOM,
+        CENTER = rviz_2d_overlay_msgs::msg::OverlayText::CENTER,
+        TOP = rviz_2d_overlay_msgs::msg::OverlayText::TOP,
+        BOTTOM = rviz_2d_overlay_msgs::msg::OverlayText::BOTTOM,
     };
 
     enum class HorizontalAlignment : uint8_t {
-        LEFT = overlay_rviz_msgs::msg::OverlayText::LEFT,
-        RIGHT = overlay_rviz_msgs::msg::OverlayText::RIGHT,
-        CENTER = overlay_rviz_msgs::msg::OverlayText::CENTER
+        LEFT = rviz_2d_overlay_msgs::msg::OverlayText::LEFT,
+        RIGHT = rviz_2d_overlay_msgs::msg::OverlayText::RIGHT,
+        CENTER = rviz_2d_overlay_msgs::msg::OverlayText::CENTER
     };
 
     /**
@@ -117,6 +117,6 @@ namespace overlay_rviz_plugins {
         Ogre::MaterialPtr panel_material_;
         Ogre::TexturePtr texture_;
     };
-} // namespace overlay_rviz_plugins
+} // namespace rviz_2d_overlay_plugins
 
-#endif // OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
+#endif // RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_UTILS_HPP

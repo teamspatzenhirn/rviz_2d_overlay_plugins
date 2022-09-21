@@ -44,7 +44,7 @@
 #include <rviz_rendering/render_system.hpp>
 #include <QPainter>
 
-namespace overlay_rviz_plugins
+namespace rviz_2d_overlay_plugins
 {
 
   PieChartDisplay::PieChartDisplay()
@@ -143,7 +143,7 @@ namespace overlay_rviz_plugins
     static int count = 0;
     std::stringstream ss;
     ss << "PieChartDisplayObject" << count++;
-    overlay_.reset(new overlay_rviz_plugins::OverlayObject(ss.str()));
+    overlay_.reset(new rviz_2d_overlay_plugins::OverlayObject(ss.str()));
     onEnable();
     updateSize();
     updateLeft();
@@ -234,7 +234,7 @@ namespace overlay_rviz_plugins
     int width = overlay_->getTextureWidth();
     int height = overlay_->getTextureHeight();
     {
-      overlay_rviz_plugins::ScopedPixelBuffer buffer = overlay_->getBuffer();
+      rviz_2d_overlay_plugins::ScopedPixelBuffer buffer = overlay_->getBuffer();
       QImage Hud = buffer.getQImage(*overlay_, bg_color);
       QPainter painter( &Hud );
       painter.setRenderHint(QPainter::Antialiasing, true);
@@ -464,4 +464,4 @@ namespace overlay_rviz_plugins
 }
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS( overlay_rviz_plugins::PieChartDisplay, rviz_common::Display )
+PLUGINLIB_EXPORT_CLASS( rviz_2d_overlay_plugins::PieChartDisplay, rviz_common::Display )
