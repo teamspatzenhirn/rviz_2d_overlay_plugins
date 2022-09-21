@@ -50,14 +50,6 @@
 #include <rviz_rendering/render_system.hpp>
 #include <sstream>
 
-static constexpr auto HOR_LEFT_OPTION = 0;
-static constexpr auto HOR_CENTER_OPTION = 1;
-static constexpr auto HOR_RIGHT_OPTION = 2;
-
-static constexpr auto VER_TOP_OPTION = 0;
-static constexpr auto VER_CENTER_OPTION = 1;
-static constexpr auto VER_BOTTOM_OPTION = 2;
-
 namespace overlay_rviz_plugins {
     OverlayTextDisplay::OverlayTextDisplay() :
         texture_width_(0),
@@ -93,15 +85,15 @@ namespace overlay_rviz_plugins {
         hor_alignment_property_ =
                 new rviz_common::properties::EnumProperty("hor_alignment", "left", "horizontal alignment of the overlay",
                                                           this, SLOT(updateHorizontalAlignment()));
-        hor_alignment_property_->addOption("left", HOR_LEFT_OPTION);
-        hor_alignment_property_->addOption("center", HOR_CENTER_OPTION);
-        hor_alignment_property_->addOption("right", HOR_RIGHT_OPTION);
+        hor_alignment_property_->addOption("left", overlay_rviz_msgs::msg::OverlayText::LEFT);
+        hor_alignment_property_->addOption("center", overlay_rviz_msgs::msg::OverlayText::CENTER);
+        hor_alignment_property_->addOption("right", overlay_rviz_msgs::msg::OverlayText::RIGHT);
         ver_alignment_property_ =
                 new rviz_common::properties::EnumProperty("ver_alignment", "top", "vertical alignment of the overlay",
                                                           this, SLOT(updateVerticalAlignment()));
-        ver_alignment_property_->addOption("top", VER_TOP_OPTION);
-        ver_alignment_property_->addOption("center", VER_CENTER_OPTION);
-        ver_alignment_property_->addOption("bottom", VER_BOTTOM_OPTION);
+        ver_alignment_property_->addOption("top", overlay_rviz_msgs::msg::OverlayText::TOP);
+        ver_alignment_property_->addOption("center", overlay_rviz_msgs::msg::OverlayText::CENTER);
+        ver_alignment_property_->addOption("bottom", overlay_rviz_msgs::msg::OverlayText::BOTTOM);
         width_property_ =
                 new rviz_common::properties::IntProperty("width", 128, "width position", this, SLOT(updateWidth()));
         width_property_->setMin(0);
@@ -297,29 +289,8 @@ namespace overlay_rviz_plugins {
             horizontal_dist_ = msg->horizontal_distance;
             vertical_dist_ = msg->vertical_distance;
 
-            switch (msg->horizontal_alignment) {
-                case overlay_rviz_msgs::msg::OverlayText::LEFT:
-                    horizontal_alignment_ = HorizontalAlignment::LEFT;
-                    break;
-                case overlay_rviz_msgs::msg::OverlayText::CENTER:
-                    horizontal_alignment_ = HorizontalAlignment::CENTER;
-                    break;
-                case overlay_rviz_msgs::msg::OverlayText::RIGHT:
-                    horizontal_alignment_ = HorizontalAlignment::RIGHT;
-                    break;
-            }
-
-            switch (msg->vertical_alignment) {
-                case overlay_rviz_msgs::msg::OverlayText::BOTTOM:
-                    vertical_alignment_ = VerticalAlignment::BOTTOM;
-                    break;
-                case overlay_rviz_msgs::msg::OverlayText::CENTER:
-                    vertical_alignment_ = VerticalAlignment::CENTER;
-                    break;
-                case overlay_rviz_msgs::msg::OverlayText::TOP:
-                    vertical_alignment_ = VerticalAlignment::TOP;
-                    break;
-            }
+            horizontal_alignment_ = HorizontalAlignment{msg->horizontal_alignment};
+            vertical_alignment_ = VerticalAlignment{msg->vertical_alignment};
         }
         if (!overtake_bg_color_properties_)
             bg_color_ = QColor(msg->bg_color.r * 255.0, msg->bg_color.g * 255.0, msg->bg_color.b * 255.0,
@@ -438,17 +409,7 @@ namespace overlay_rviz_plugins {
     }
 
     void OverlayTextDisplay::updateVerticalAlignment() {
-        switch (ver_alignment_property_->getOptionInt()) {
-            case VER_TOP_OPTION:
-                vertical_alignment_ = VerticalAlignment::TOP;
-                break;
-            case VER_CENTER_OPTION:
-                vertical_alignment_ = VerticalAlignment::CENTER;
-                break;
-            case VER_BOTTOM_OPTION:
-                vertical_alignment_ = VerticalAlignment::BOTTOM;
-                break;
-        }
+        vertical_alignment_ = VerticalAlignment{static_cast<uint8_t>(ver_alignment_property_->getOptionInt())};
 
         if (overtake_position_properties_) {
             require_update_texture_ = true;
@@ -456,17 +417,7 @@ namespace overlay_rviz_plugins {
     }
 
     void OverlayTextDisplay::updateHorizontalAlignment() {
-        switch (hor_alignment_property_->getOptionInt()) {
-            case HOR_LEFT_OPTION:
-                horizontal_alignment_ = HorizontalAlignment::LEFT;
-                break;
-            case HOR_CENTER_OPTION:
-                horizontal_alignment_ = HorizontalAlignment::CENTER;
-                break;
-            case HOR_RIGHT_OPTION:
-                horizontal_alignment_ = HorizontalAlignment::RIGHT;
-                break;
-        }
+        horizontal_alignment_ = HorizontalAlignment{static_cast<uint8_t>(hor_alignment_property_->getOptionInt())};
 
         if (overtake_position_properties_) {
             require_update_texture_ = true;

@@ -69,12 +69,12 @@ namespace overlay_rviz_plugins {
         Ogre::HardwarePixelBufferSharedPtr pixel_buffer_;
     };
 
-    enum class VerticalAlignment {
-        BOTTOM = 0, CENTER = 1, TOP = 2
+    enum class VerticalAlignment : uint8_t {
+        CENTER = 2, TOP = 3, BOTTOM = 4,
     };
 
-    enum class HorizontalAlignment {
-        LEFT = 0, CENTER = 1, RIGHT = 2
+    enum class HorizontalAlignment : uint8_t {
+        LEFT = 0, RIGHT = 1, CENTER = 2
     };
 
     /**
