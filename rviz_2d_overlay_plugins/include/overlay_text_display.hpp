@@ -36,7 +36,7 @@
 #ifndef RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
 #define RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
 
-#include "overlay_rviz_msgs/msg/overlay_text.hpp"
+#include "rviz_2d_overlay_msgs/msg/overlay_text.hpp"
 #ifndef Q_MOC_RUN
     #include <OgreColourValue.h>
     #include <OgreMaterial.h>
@@ -53,7 +53,7 @@
 #endif
 
 namespace rviz_2d_overlay_plugins {
-    class OverlayTextDisplay : public rviz_common::RosTopicDisplay<overlay_rviz_msgs::msg::OverlayText> {
+    class OverlayTextDisplay : public rviz_common::RosTopicDisplay<rviz_2d_overlay_msgs::msg::OverlayText> {
         Q_OBJECT
       public:
         OverlayTextDisplay();
@@ -130,7 +130,7 @@ namespace rviz_2d_overlay_plugins {
         void updateLineWidth();
 
       private:
-        void processMessage(overlay_rviz_msgs::msg::OverlayText::ConstSharedPtr msg) override;
+        void processMessage(rviz_2d_overlay_msgs::msg::OverlayText::ConstSharedPtr msg) override;
     };
 } // namespace rviz_2d_overlay_plugins
 
