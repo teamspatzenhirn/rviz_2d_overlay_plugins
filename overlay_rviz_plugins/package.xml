@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-    <name>overlay_rviz_plugins</name>
+    <name>rviz_2d_overlay_plugins</name>
     <version>1.1.0</version>
     <description>RViz2 plugin for 2D overlays in the 3D view. Mainly a ROS2 port of the JSK overlay plugin
         (https://github.com/jsk-ros-pkg/jsk_visualization).
@@ -12,7 +12,7 @@
 
     <license>BSD-3-Clause</license>
 
-    <depend>overlay_rviz_msgs</depend>
+    <depend>rviz_2d_overlay_msgs</depend>
 
     <buildtool_depend>ament_cmake</buildtool_depend>
 

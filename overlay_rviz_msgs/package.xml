@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-    <name>overlay_rviz_msgs</name>
+    <name>rviz_2d_overlay_msgs</name>
     <version>1.1.0</version>
     <description>Messages describing 2D overlays for RVIZ, extracted/derived from the jsk_visualization ROS1 packege.
     </description>
