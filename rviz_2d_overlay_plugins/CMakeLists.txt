@@ -60,7 +60,7 @@ ament_target_dependencies(${PROJECT_NAME}
         PUBLIC
         rviz_common
         rviz_rendering
-        overlay_rviz_msgs
+        rviz_2d_overlay_msgs
         std_msgs
         )
 
