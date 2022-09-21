@@ -4,7 +4,7 @@ project(rviz_2d_overlay_plugins)
 # find dependencies
 find_package(ament_cmake REQUIRED)
 
-find_package(overlay_rviz_msgs REQUIRED)
+find_package(rviz_2d_overlay_msgs REQUIRED)
 
 find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
