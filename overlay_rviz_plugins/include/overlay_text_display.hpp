@@ -59,17 +59,6 @@ namespace overlay_rviz_plugins {
         OverlayTextDisplay();
         virtual ~OverlayTextDisplay();
 
-        // methods for OverlayPickerTool
-        virtual bool isInRegion(int x, int y);
-        virtual void movePosition(int x, int y);
-        virtual void setPosition(int x, int y);
-        virtual int getX() const {
-            return left_;
-        };
-        virtual int getY() const {
-            return top_;
-        };
-
       protected:
         overlay_rviz_plugins::OverlayObject::SharedPtr overlay_;
 
@@ -88,8 +77,10 @@ namespace overlay_rviz_plugins {
         std::string text_;
         QStringList font_families_;
         std::string font_;
-        int left_;
-        int top_;
+        int horizontal_dist_;
+        int vertical_dist_;
+        HorizontalAlignment horizontal_alignment_;
+        VerticalAlignment vertical_alignment_;
 
         virtual void onInitialize() override;
         virtual void onEnable() override;
@@ -104,8 +95,10 @@ namespace overlay_rviz_plugins {
         rviz_common::properties::BoolProperty *overtake_bg_color_properties_property_;
         rviz_common::properties::BoolProperty *align_bottom_property_;
         rviz_common::properties::BoolProperty *invert_shadow_property_;
-        rviz_common::properties::IntProperty *top_property_;
-        rviz_common::properties::IntProperty *left_property_;
+        rviz_common::properties::IntProperty *hor_dist_property_;
+        rviz_common::properties::IntProperty *ver_dist_property_;
+        rviz_common::properties::EnumProperty *hor_alignment_property_;
+        rviz_common::properties::EnumProperty *ver_alignment_property_;
         rviz_common::properties::IntProperty *width_property_;
         rviz_common::properties::IntProperty *height_property_;
         rviz_common::properties::IntProperty *text_size_property_;
@@ -122,8 +115,10 @@ namespace overlay_rviz_plugins {
         void updateOvertakeBGColorProperties();
         void updateAlignBottom();
         void updateInvertShadow();
-        void updateTop();
-        void updateLeft();
+        void updateHorizontalDistance();
+        void updateVerticalDistance();
+        void updateHorizontalAlignment();
+        void updateVerticalAlignment();
         void updateWidth();
         void updateHeight();
         void updateTextSize();

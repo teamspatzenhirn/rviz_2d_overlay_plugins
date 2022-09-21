@@ -52,6 +52,8 @@
 #include <memory>
 #include <string>
 
+#include "overlay_rviz_msgs/msg/overlay_text.hpp"
+
 namespace overlay_rviz_plugins {
     class OverlayObject;
 
@@ -69,10 +71,24 @@ namespace overlay_rviz_plugins {
         Ogre::HardwarePixelBufferSharedPtr pixel_buffer_;
     };
 
+    enum class VerticalAlignment : uint8_t {
+        CENTER = overlay_rviz_msgs::msg::OverlayText::CENTER,
+        TOP = overlay_rviz_msgs::msg::OverlayText::TOP,
+        BOTTOM = overlay_rviz_msgs::msg::OverlayText::BOTTOM,
+    };
 
-    // this is a class for put overlay object on rviz 3D panel.
-    // This class suppose to be instantiated in onInitialize method
-    // of rviz::Display class.
+    enum class HorizontalAlignment : uint8_t {
+        LEFT = overlay_rviz_msgs::msg::OverlayText::LEFT,
+        RIGHT = overlay_rviz_msgs::msg::OverlayText::RIGHT,
+        CENTER = overlay_rviz_msgs::msg::OverlayText::CENTER
+    };
+
+    /**
+     * Helper class for realizing an overlay object on top of the rviz 3D panel.
+     *
+     * This class is supposed to be instantiated in the onInitalize method of the
+     * rviz_common::Display class.
+     */
     class OverlayObject {
       public:
         using SharedPtr = std::shared_ptr<OverlayObject>;
@@ -86,7 +102,9 @@ namespace overlay_rviz_plugins {
         virtual bool isTextureReady() const;
         virtual void updateTextureSize(unsigned int width, unsigned int height);
         virtual ScopedPixelBuffer getBuffer();
-        virtual void setPosition(double left, double top);
+        virtual void setPosition(double hor_dist, double ver_dist,
+                                 HorizontalAlignment hor_alignment = HorizontalAlignment::LEFT,
+                                 VerticalAlignment ver_alignment = VerticalAlignment::TOP);
         virtual void setDimensions(double width, double height);
         virtual bool isVisible() const;
         virtual unsigned int getTextureWidth() const;

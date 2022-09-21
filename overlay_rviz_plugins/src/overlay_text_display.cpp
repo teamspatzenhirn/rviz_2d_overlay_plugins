@@ -78,10 +78,22 @@ namespace overlay_rviz_plugins {
                 SLOT(updateAlignBottom()));
         invert_shadow_property_ = new rviz_common::properties::BoolProperty(
                 "Invert Shadow", false, "make shadow lighter than original text", this, SLOT(updateInvertShadow()));
-        top_property_ = new rviz_common::properties::IntProperty("top", 0, "top position", this, SLOT(updateTop()));
-        top_property_->setMin(0);
-        left_property_ = new rviz_common::properties::IntProperty("left", 0, "left position", this, SLOT(updateLeft()));
-        left_property_->setMin(0);
+        hor_dist_property_ = new rviz_common::properties::IntProperty("hor_dist", 0, "horizontal distance to anchor",
+                                                                      this, SLOT(updateHorizontalDistance()));
+        ver_dist_property_ = new rviz_common::properties::IntProperty("ver_dist", 0, "vertical distance to anchor",
+                                                                      this, SLOT(updateVerticalDistance()));
+        hor_alignment_property_ =
+                new rviz_common::properties::EnumProperty("hor_alignment", "left", "horizontal alignment of the overlay",
+                                                          this, SLOT(updateHorizontalAlignment()));
+        hor_alignment_property_->addOption("left", overlay_rviz_msgs::msg::OverlayText::LEFT);
+        hor_alignment_property_->addOption("center", overlay_rviz_msgs::msg::OverlayText::CENTER);
+        hor_alignment_property_->addOption("right", overlay_rviz_msgs::msg::OverlayText::RIGHT);
+        ver_alignment_property_ =
+                new rviz_common::properties::EnumProperty("ver_alignment", "top", "vertical alignment of the overlay",
+                                                          this, SLOT(updateVerticalAlignment()));
+        ver_alignment_property_->addOption("top", overlay_rviz_msgs::msg::OverlayText::TOP);
+        ver_alignment_property_->addOption("center", overlay_rviz_msgs::msg::OverlayText::CENTER);
+        ver_alignment_property_->addOption("bottom", overlay_rviz_msgs::msg::OverlayText::BOTTOM);
         width_property_ =
                 new rviz_common::properties::IntProperty("width", 128, "width position", this, SLOT(updateWidth()));
         width_property_->setMin(0);
@@ -146,8 +158,10 @@ namespace overlay_rviz_plugins {
         updateOvertakeBGColorProperties();
         updateAlignBottom();
         updateInvertShadow();
-        updateTop();
-        updateLeft();
+        updateHorizontalDistance();
+        updateVerticalDistance();
+        updateHorizontalAlignment();
+        updateVerticalAlignment();
         updateWidth();
         updateHeight();
         updateTextSize();
@@ -267,12 +281,16 @@ namespace overlay_rviz_plugins {
 
         // store message for update method
         text_ = msg->text;
+
         if (!overtake_position_properties_) {
             texture_width_ = msg->width;
             texture_height_ = msg->height;
             text_size_ = msg->text_size;
-            left_ = msg->left;
-            top_ = msg->top;
+            horizontal_dist_ = msg->horizontal_distance;
+            vertical_dist_ = msg->vertical_distance;
+
+            horizontal_alignment_ = HorizontalAlignment{msg->horizontal_alignment};
+            vertical_alignment_ = VerticalAlignment{msg->vertical_alignment};
         }
         if (!overtake_bg_color_properties_)
             bg_color_ = QColor(msg->bg_color.r * 255.0, msg->bg_color.g * 255.0, msg->bg_color.b * 255.0,
@@ -284,7 +302,7 @@ namespace overlay_rviz_plugins {
             line_width_ = msg->line_width;
         }
         if (overlay_) {
-            overlay_->setPosition(left_, top_);
+            overlay_->setPosition(horizontal_dist_, vertical_dist_, horizontal_alignment_, vertical_alignment_);
         }
         require_update_texture_ = true;
     }
@@ -292,8 +310,10 @@ namespace overlay_rviz_plugins {
     void OverlayTextDisplay::updateOvertakePositionProperties() {
 
         if (!overtake_position_properties_ && overtake_position_properties_property_->getBool()) {
-            updateTop();
-            updateLeft();
+            updateVerticalDistance();
+            updateHorizontalDistance();
+            updateVerticalAlignment();
+            updateHorizontalAlignment();
             updateWidth();
             updateHeight();
             updateTextSize();
@@ -302,14 +322,18 @@ namespace overlay_rviz_plugins {
 
         overtake_position_properties_ = overtake_position_properties_property_->getBool();
         if (overtake_position_properties_) {
-            top_property_->show();
-            left_property_->show();
+            hor_dist_property_->show();
+            ver_dist_property_->show();
+            hor_alignment_property_->show();
+            ver_alignment_property_->show();
             width_property_->show();
             height_property_->show();
             text_size_property_->show();
         } else {
-            top_property_->hide();
-            left_property_->hide();
+            hor_dist_property_->hide();
+            ver_dist_property_->hide();
+            hor_alignment_property_->hide();
+            ver_alignment_property_->hide();
             width_property_->hide();
             height_property_->hide();
             text_size_property_->hide();
@@ -370,16 +394,31 @@ namespace overlay_rviz_plugins {
         invert_shadow_ = invert_shadow_property_->getBool();
     }
 
-
-    void OverlayTextDisplay::updateTop() {
-        top_ = top_property_->getInt();
+    void OverlayTextDisplay::updateVerticalDistance() {
+        vertical_dist_ = ver_dist_property_->getInt();
         if (overtake_position_properties_) {
             require_update_texture_ = true;
         }
     }
 
-    void OverlayTextDisplay::updateLeft() {
-        left_ = left_property_->getInt();
+    void OverlayTextDisplay::updateHorizontalDistance() {
+        horizontal_dist_ = hor_dist_property_->getInt();
+        if (overtake_position_properties_) {
+            require_update_texture_ = true;
+        }
+    }
+
+    void OverlayTextDisplay::updateVerticalAlignment() {
+        vertical_alignment_ = VerticalAlignment{static_cast<uint8_t>(ver_alignment_property_->getOptionInt())};
+
+        if (overtake_position_properties_) {
+            require_update_texture_ = true;
+        }
+    }
+
+    void OverlayTextDisplay::updateHorizontalAlignment() {
+        horizontal_alignment_ = HorizontalAlignment{static_cast<uint8_t>(hor_alignment_property_->getOptionInt())};
+
         if (overtake_position_properties_) {
             require_update_texture_ = true;
         }
@@ -458,20 +497,6 @@ namespace overlay_rviz_plugins {
         if (overtake_fg_color_properties_) {
             require_update_texture_ = true;
         }
-    }
-
-    bool OverlayTextDisplay::isInRegion(int x, int y) {
-        return (top_ < y && top_ + texture_height_ > y && left_ < x && left_ + texture_width_ > x);
-    }
-
-    void OverlayTextDisplay::movePosition(int x, int y) {
-        top_ = y;
-        left_ = x;
-    }
-
-    void OverlayTextDisplay::setPosition(int x, int y) {
-        top_property_->setValue(y);
-        left_property_->setValue(x);
     }
 
 } // namespace overlay_rviz_plugins
