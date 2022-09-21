@@ -52,6 +52,8 @@
 #include <memory>
 #include <string>
 
+#include "overlay_rviz_msgs/msg/overlay_text.hpp"
+
 namespace overlay_rviz_plugins {
     class OverlayObject;
 
@@ -70,11 +72,15 @@ namespace overlay_rviz_plugins {
     };
 
     enum class VerticalAlignment : uint8_t {
-        CENTER = 2, TOP = 3, BOTTOM = 4,
+        CENTER = overlay_rviz_msgs::msg::OverlayText::CENTER,
+        TOP = overlay_rviz_msgs::msg::OverlayText::TOP,
+        BOTTOM = overlay_rviz_msgs::msg::OverlayText::BOTTOM,
     };
 
     enum class HorizontalAlignment : uint8_t {
-        LEFT = 0, RIGHT = 1, CENTER = 2
+        LEFT = overlay_rviz_msgs::msg::OverlayText::LEFT,
+        RIGHT = overlay_rviz_msgs::msg::OverlayText::RIGHT,
+        CENTER = overlay_rviz_msgs::msg::OverlayText::CENTER
     };
 
     /**
