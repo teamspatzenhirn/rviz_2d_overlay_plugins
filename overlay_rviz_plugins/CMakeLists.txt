@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(overlay_rviz_plugins)
+project(rviz_2d_overlay_plugins)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
