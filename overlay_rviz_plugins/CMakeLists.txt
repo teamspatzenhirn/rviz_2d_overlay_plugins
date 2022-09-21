@@ -86,5 +86,5 @@ install(
 )
 
 ament_package(
-        CONFIG_EXTRAS "overlay_rviz_plugins-extras.cmake"
+        CONFIG_EXTRAS "rviz_2d_overlay_plugins-extras.cmake"
 )

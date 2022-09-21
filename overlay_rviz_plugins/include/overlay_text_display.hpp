@@ -33,8 +33,8 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
-#ifndef OVERLAY_RVIZ_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
-#define OVERLAY_RVIZ_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
+#ifndef RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
+#define RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
 
 #include "overlay_rviz_msgs/msg/overlay_text.hpp"
 #ifndef Q_MOC_RUN
@@ -52,7 +52,7 @@
     #include "overlay_utils.hpp"
 #endif
 
-namespace overlay_rviz_plugins {
+namespace rviz_2d_overlay_plugins {
     class OverlayTextDisplay : public rviz_common::RosTopicDisplay<overlay_rviz_msgs::msg::OverlayText> {
         Q_OBJECT
       public:
@@ -60,7 +60,7 @@ namespace overlay_rviz_plugins {
         virtual ~OverlayTextDisplay();
 
       protected:
-        overlay_rviz_plugins::OverlayObject::SharedPtr overlay_;
+        rviz_2d_overlay_plugins::OverlayObject::SharedPtr overlay_;
 
         int texture_width_;
         int texture_height_;
@@ -132,6 +132,6 @@ namespace overlay_rviz_plugins {
       private:
         void processMessage(overlay_rviz_msgs::msg::OverlayText::ConstSharedPtr msg) override;
     };
-} // namespace overlay_rviz_plugins
+} // namespace rviz_2d_overlay_plugins
 
-#endif // OVERLAY_RVIZ_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP
+#endif // RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_TEXT_DISPLAY_HPP

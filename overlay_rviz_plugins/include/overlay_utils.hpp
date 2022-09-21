@@ -34,8 +34,8 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-#ifndef OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
-#define OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
+#ifndef RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_UTILS_HPP
+#define RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_UTILS_HPP
 
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreMaterialManager.h>
@@ -54,7 +54,7 @@
 
 #include "overlay_rviz_msgs/msg/overlay_text.hpp"
 
-namespace overlay_rviz_plugins {
+namespace rviz_2d_overlay_plugins {
     class OverlayObject;
 
     class ScopedPixelBuffer {
@@ -117,6 +117,6 @@ namespace overlay_rviz_plugins {
         Ogre::MaterialPtr panel_material_;
         Ogre::TexturePtr texture_;
     };
-} // namespace overlay_rviz_plugins
+} // namespace rviz_2d_overlay_plugins
 
-#endif // OVERLAY_RVIZ_PLUGINS_OVERLAY_UTILS_HPP
+#endif // RVIZ_2D_OVERLAY_PLUGINS_OVERLAY_UTILS_HPP

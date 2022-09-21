@@ -38,7 +38,7 @@
 
 #include <rviz_common/logging.hpp>
 
-namespace overlay_rviz_plugins {
+namespace rviz_2d_overlay_plugins {
     ScopedPixelBuffer::ScopedPixelBuffer(Ogre::HardwarePixelBufferSharedPtr pixel_buffer) :
         pixel_buffer_(pixel_buffer) {
         pixel_buffer_->lock(Ogre::HardwareBuffer::HBL_NORMAL);
@@ -227,4 +227,4 @@ namespace overlay_rviz_plugins {
             return 0;
         }
     }
-} // namespace overlay_rviz_plugins
+} // namespace rviz_2d_overlay_plugins

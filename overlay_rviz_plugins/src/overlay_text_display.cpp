@@ -50,7 +50,7 @@
 #include <rviz_rendering/render_system.hpp>
 #include <sstream>
 
-namespace overlay_rviz_plugins {
+namespace rviz_2d_overlay_plugins {
     OverlayTextDisplay::OverlayTextDisplay() :
         texture_width_(0),
         texture_height_(0),
@@ -187,7 +187,7 @@ namespace overlay_rviz_plugins {
 
         overlay_->updateTextureSize(texture_width_, texture_height_);
         {
-            overlay_rviz_plugins::ScopedPixelBuffer buffer = overlay_->getBuffer();
+            rviz_2d_overlay_plugins::ScopedPixelBuffer buffer = overlay_->getBuffer();
             QImage Hud = buffer.getQImage(*overlay_, bg_color_);
             QPainter painter(&Hud);
             painter.setRenderHint(QPainter::Antialiasing, true);
@@ -268,7 +268,7 @@ namespace overlay_rviz_plugins {
             static int count = 0;
             std::stringstream ss;
             ss << "OverlayTextDisplayObject" << count++;
-            overlay_.reset(new overlay_rviz_plugins::OverlayObject(ss.str()));
+            overlay_.reset(new rviz_2d_overlay_plugins::OverlayObject(ss.str()));
             overlay_->show();
         }
         if (overlay_) {
@@ -499,7 +499,7 @@ namespace overlay_rviz_plugins {
         }
     }
 
-} // namespace overlay_rviz_plugins
+} // namespace rviz_2d_overlay_plugins
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(overlay_rviz_plugins::OverlayTextDisplay, rviz_common::Display)
+PLUGINLIB_EXPORT_CLASS(rviz_2d_overlay_plugins::OverlayTextDisplay, rviz_common::Display)
