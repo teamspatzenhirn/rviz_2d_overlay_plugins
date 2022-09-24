@@ -47,9 +47,7 @@
 namespace rviz_2d_overlay_plugins
 {
 
-  PieChartDisplay::PieChartDisplay()
-    : update_required_(false), first_time_(true), data_(0.0)
-  {
+    PieChartDisplay::PieChartDisplay() : data_(0.0), update_required_(false), first_time_(true) {
     size_property_ = new rviz_common::properties::IntProperty("size", 128,
                                            "size of the plotter window",
                                            this, SLOT(updateSize()));
@@ -167,18 +165,16 @@ namespace rviz_2d_overlay_plugins
     overlay_->hide();
   }
 
-  void PieChartDisplay::update(float wall_dt, float ros_dt)
-  {
-    if (update_required_) {
-      update_required_ = false;
-      overlay_->updateTextureSize(texture_size_, texture_size_ + caption_offset_);
-      overlay_->setPosition(left_, top_);
-      overlay_->setDimensions(overlay_->getTextureWidth(),
-                              overlay_->getTextureHeight());
-      drawPlot(data_);
-    }
+  void PieChartDisplay::update(float /* wall_dt */, float /* ros_dt */) {
+      if (update_required_) {
+          update_required_ = false;
+          overlay_->updateTextureSize(texture_size_, texture_size_ + caption_offset_);
+          overlay_->setPosition(left_, top_);
+          overlay_->setDimensions(overlay_->getTextureWidth(), overlay_->getTextureHeight());
+          drawPlot(data_);
+      }
   }
-  
+
   void PieChartDisplay::processMessage(std_msgs::msg::Float32::ConstSharedPtr msg)
   {
     std::lock_guard lock(mutex_);
