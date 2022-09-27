@@ -2,8 +2,8 @@
 Changelog for package rviz_2d_overlay_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2022-09-27)
+------------------
 * Add missing dependencies to package.xml
 * Fix various compiler-warnings (NFC)
 * Rename package from overlay_rviz_plugins to rviz_2d_overlay_plugins
