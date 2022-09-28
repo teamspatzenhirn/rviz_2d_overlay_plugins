@@ -17,11 +17,11 @@ the [OverlayText.msg message type](https://github.com/teamspatzenhirn/rviz_2d_ov
 
 To allow easy positioning of the overlay along the edges of the rviz window, and to support multiple/dynamic window
 sizes, the position is given by offsets from the respective border.
-Depending on if the `horizontal_alignment` is `LEFT`, `RIGHT` or  `CENTER`,
+Depending on whether the `horizontal_alignment` is `LEFT`, `RIGHT` or  `CENTER`,
 the `horizontal_distance` field sets the distance to the left or right border, or the offset from center.
 
 For `LEFT` and `RIGHT` alignment, a distance of zero means that the text is aligned to the border without any gap,
-a positive distance moved the overlay towards the center.
+a positive distance moves the overlay towards the center.
 
 For `CENTER` alignment, a distance of zero means completely centered, positive values move the overlay towards the
 bottom right of the window.
