@@ -2,6 +2,13 @@
 Changelog for package rviz_2d_overlay_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add package documentation using doxygen
+* add rosdoc2 config
+* add readme at package level
+* Contributors: Jonas Otto, Dominik Authaler
+
 1.2.0 (2022-09-27)
 ------------------
 * Add missing dependencies to package.xml

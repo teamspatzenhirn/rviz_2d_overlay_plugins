@@ -2,6 +2,9 @@
 Changelog for package rviz_2d_overlay_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.2.0 (2022-09-27)
 ------------------
 * Rename package from overlay_rviz_msgs to rviz_2d_overlay_msgs
