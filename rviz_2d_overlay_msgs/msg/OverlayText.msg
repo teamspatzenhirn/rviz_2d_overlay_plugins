@@ -12,8 +12,6 @@ uint8 action
 
 int32 width
 int32 height
-int32 left
-int32 top
 # Position: Positive values move the overlay towards the center of the window,
 #  for center alignment positive values move the overlay towards the bottom right
 int32 horizontal_distance # Horizontal distance from left/right border or center, depending on alignment
