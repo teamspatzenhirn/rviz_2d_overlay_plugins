@@ -13,7 +13,6 @@ find_package(std_msgs REQUIRED)
 
 set(headers_to_moc
         include/overlay_text_display.hpp
-        include/overlay_utils.hpp
         include/pie_chart_display.h
         )
 
