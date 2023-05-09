@@ -26,6 +26,9 @@ set(display_source_files
         src/pie_chart_display.cpp
         )
 
+add_executable(string_to_overlay_text src/string_to_overlay_text.cpp)
+ament_target_dependencies(string_to_overlay_text rclcpp std_msgs rviz_2d_overlay_msgs)
+        
 add_library(${PROJECT_NAME} SHARED
         ${display_moc_files}
         ${display_source_files}
@@ -77,11 +80,19 @@ install(
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin
         INCLUDES DESTINATION include
-)
-
+        )
+        
 install(
         DIRECTORY include/
         DESTINATION include
+        )
+        
+install(DIRECTORY launch
+        DESTINATION share/${PROJECT_NAME})
+
+install(TARGETS
+        string_to_overlay_text
+        DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package(
