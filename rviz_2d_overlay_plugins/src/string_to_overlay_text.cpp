@@ -115,7 +115,6 @@ private:
         }        
         ov_msg.width = 200;
         ov_msg.height = 40;
-        //RCLCPP_INFO_STREAM(this->get_logger(), "Str: " << st_msg.data << " ");
         pub_ov_->publish(ov_msg);
     }
 
