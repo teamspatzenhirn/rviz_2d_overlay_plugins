@@ -11,7 +11,7 @@
     <maintainer email="dominik.authaler@uni-ulm.de">Dominik Authaler</maintainer>
 
     <license>BSD-3-Clause</license>
-
+    
     <depend>boost</depend>
     <depend>rviz_2d_overlay_msgs</depend>
     <depend>rviz_common</depend>

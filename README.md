@@ -12,3 +12,8 @@ both usage information and source code documentation.
 ![Screenshot showing the robot velocity as an overlay above the RViz 3D Scene, as well as the expanded properties of the plugin](rviz_2d_overlay_plugins/doc/screenshot_vel_overlay.png)
 
 ![Screenshot showing the PieChartDisplay, a circular gauge](rviz_2d_overlay_plugins/doc/screenshot_PieChartDisplay.png)
+
+
+```
+colcon build --packages-select rviz_2d_overlay_msgs rviz_2d_overlay_plugins
+```
