@@ -2,6 +2,12 @@
 Changelog for package rviz_2d_overlay_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added string to overlay text converter node
+* fix QT build warnings
+* Contributors: Ernő Horváth, Jonas Otto, szepilot
+
 1.2.1 (2022-09-30)
 ------------------
 * Add package documentation using doxygen
