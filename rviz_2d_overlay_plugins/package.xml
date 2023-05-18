@@ -12,7 +12,6 @@
 
     <license>BSD-3-Clause</license>
     
-    <exec_depend>ros2launch</exec_depend>
     <depend>boost</depend>
     <depend>rviz_2d_overlay_msgs</depend>
     <depend>rviz_common</depend>

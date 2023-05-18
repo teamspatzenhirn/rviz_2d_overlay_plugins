@@ -87,9 +87,6 @@ install(
         DESTINATION include
         )
         
-install(DIRECTORY launch
-        DESTINATION share/${PROJECT_NAME})
-
 install(TARGETS
         string_to_overlay_text
         DESTINATION lib/${PROJECT_NAME}
