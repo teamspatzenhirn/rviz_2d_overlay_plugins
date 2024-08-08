@@ -2,6 +2,7 @@
 /*********************************************************************
  * Software License Agreement (BSD License)
  *
+ *  Copyright (c) 2024, rcp1
  *  Copyright (c) 2014, JSK Lab
  *  All rights reserved.
  *
@@ -32,28 +33,31 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
-#ifndef JSK_RVIZ_PLUGIN_PLOTTER_2D_H_
-#define JSK_RVIZ_PLUGIN_PLOTTER_2D_H_
+#ifndef JSK_RVIZ_PLUGIN_PLOTTER_2D_HPP_
+#define JSK_RVIZ_PLUGIN_PLOTTER_2D_HPP_
 
-#include "std_msgs/Float32.h"
+#include <mutex>
+
+#include "std_msgs/msg/float32.hpp"
 #ifndef Q_MOC_RUN
-#include <rviz/display.h>
-#include "overlay_utils.h"
-#include <OGRE/OgreColourValue.h>
-#include <OGRE/OgreTexture.h>
-#include <OGRE/OgreMaterial.h>
-#include <rviz/properties/int_property.h>
-#include <rviz/properties/float_property.h>
-#include <rviz/properties/color_property.h>
-#include <rviz/properties/bool_property.h>
-#include <rviz/properties/ros_topic_property.h>
+  #include <rviz_common/display.hpp>
+  #include "overlay_utils.hpp"
+  #include <OgreColourValue.h>
+  #include <OgreTexture.h>
+  #include <OgreMaterial.h>
+  #include <rviz_common/properties/bool_property.hpp>
+  #include <rviz_common/properties/color_property.hpp>
+  #include <rviz_common/properties/float_property.hpp>
+  #include <rviz_common/properties/int_property.hpp>
+  #include <rviz_common/properties/ros_topic_property.hpp>
+  #include <rviz_common/ros_topic_display.hpp>
 #endif
 
-namespace jsk_rviz_plugins
+namespace rviz_2d_overlay_plugins
 {
 
   class Plotter2DDisplay
-    : public rviz::Display
+    : public rviz_common::RosTopicDisplay<std_msgs::msg::Float32>
   {
     Q_OBJECT
   public:
@@ -63,49 +67,46 @@ namespace jsk_rviz_plugins
     virtual bool isInRegion(int x, int y);
     virtual void movePosition(int x, int y);
     virtual void setPosition(int x, int y);
-    virtual int getX() { return left_; };
-    virtual int getY() { return top_; };
+    virtual int getX() const { return left_; };
+    virtual int getY() const { return top_; };
   protected:
     ////////////////////////////////////////////////////////
     // methods
     ////////////////////////////////////////////////////////
     virtual void update(float wall_dt, float ros_dt);
-    virtual void subscribe();
-    virtual void unsubscribe();
     virtual void onEnable();
     virtual void onDisable();
     virtual void initializeBuffer();
     virtual void onInitialize();
-    virtual void processMessage(const std_msgs::Float32::ConstPtr& msg);
+    virtual void processMessage(std_msgs::msg::Float32::ConstSharedPtr msg) override;
     virtual void drawPlot();
     ////////////////////////////////////////////////////////
     // properties
     ////////////////////////////////////////////////////////
-    rviz::RosTopicProperty* update_topic_property_;
-    rviz::BoolProperty* show_value_property_;
-    rviz::ColorProperty* fg_color_property_;
-    rviz::ColorProperty* bg_color_property_;
-    rviz::FloatProperty* fg_alpha_property_;
-    rviz::FloatProperty* bg_alpha_property_;
-    rviz::FloatProperty* update_interval_property_;
-    rviz::BoolProperty* show_border_property_;
-    rviz::IntProperty* buffer_length_property_;
-    rviz::IntProperty* width_property_;
-    rviz::IntProperty* height_property_;
-    rviz::IntProperty* left_property_;
-    rviz::IntProperty* top_property_;
-    rviz::IntProperty* line_width_property_;
-    rviz::BoolProperty* auto_color_change_property_;
-    rviz::ColorProperty* max_color_property_;
-    rviz::BoolProperty* show_caption_property_;
-    rviz::IntProperty* text_size_property_;
-    rviz::BoolProperty* auto_scale_property_;
-    rviz::FloatProperty* max_value_property_;
-    rviz::FloatProperty* min_value_property_;
-    rviz::BoolProperty* auto_text_size_in_plot_property_;
-    rviz::IntProperty* text_size_in_plot_property_;
+    rviz_common::properties::BoolProperty* show_value_property_;
+    rviz_common::properties::ColorProperty* fg_color_property_;
+    rviz_common::properties::ColorProperty* bg_color_property_;
+    rviz_common::properties::FloatProperty* fg_alpha_property_;
+    rviz_common::properties::FloatProperty* bg_alpha_property_;
+    rviz_common::properties::FloatProperty* update_interval_property_;
+    rviz_common::properties::BoolProperty* show_border_property_;
+    rviz_common::properties::IntProperty* buffer_length_property_;
+    rviz_common::properties::IntProperty* width_property_;
+    rviz_common::properties::IntProperty* height_property_;
+    rviz_common::properties::IntProperty* left_property_;
+    rviz_common::properties::IntProperty* top_property_;
+    rviz_common::properties::IntProperty* line_width_property_;
+    rviz_common::properties::BoolProperty* auto_color_change_property_;
+    rviz_common::properties::ColorProperty* max_color_property_;
+    rviz_common::properties::BoolProperty* show_caption_property_;
+    rviz_common::properties::IntProperty* text_size_property_;
+    rviz_common::properties::BoolProperty* auto_scale_property_;
+    rviz_common::properties::FloatProperty* max_value_property_;
+    rviz_common::properties::FloatProperty* min_value_property_;
+    rviz_common::properties::BoolProperty* auto_text_size_in_plot_property_;
+    rviz_common::properties::IntProperty* text_size_in_plot_property_;
 
-    OverlayObject::Ptr overlay_;
+    rviz_2d_overlay_plugins::OverlayObject::SharedPtr overlay_;
     QColor fg_color_;
     QColor max_color_;
     QColor bg_color_;
@@ -138,11 +139,9 @@ namespace jsk_rviz_plugins
     ////////////////////////////////////////////////////////
     // ROS variables
     ////////////////////////////////////////////////////////
-    boost::mutex mutex_;
-    ros::Subscriber sub_;
+    std::mutex mutex_;
 
   protected Q_SLOTS:
-    void updateTopic();
     void updateShowValue();
     void updateBufferSize();
     void updateBGColor();
@@ -168,6 +167,6 @@ namespace jsk_rviz_plugins
 
   private:
   };
-}
+}  // namespace rviz_2d_overlay_plugins
 
-#endif
+#endif  // JSK_RVIZ_PLUGIN_PLOTTER_2D_HPP_
