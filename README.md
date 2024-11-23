@@ -13,7 +13,8 @@ both usage information and source code documentation.
 
 ![Screenshot showing the PieChartDisplay, a circular gauge](rviz_2d_overlay_plugins/doc/screenshot_PieChartDisplay.png)
 
+![Screenshot showing the Plotter2dDisplay, a plotter](rviz_2d_overlay_plugins/doc/screenshot_plotter_2d.png)
 
-```
+```bash
 colcon build --packages-select rviz_2d_overlay_msgs rviz_2d_overlay_plugins
 ```
