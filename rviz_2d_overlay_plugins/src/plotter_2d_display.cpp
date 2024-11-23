@@ -311,75 +311,75 @@ namespace rviz_2d_overlay_plugins
 
   double Plotter2DDisplay::recurseToField(const ros_babel_fish::Message& msg, size_t topic_field_idx)
   {
-      using namespace ros_babel_fish;
+    using namespace ros_babel_fish;
 
-      if (topic_field_idx == topic_fields_.size()) {
-          switch ( msg.type() ) {
-              case MessageTypes::Float:
-                return msg.value<float>();
-                break;
-              case MessageTypes::Double:
-                return msg.value<double>();
-                break;
-              case MessageTypes::LongDouble:
-                return msg.value<long double>();
-                break;
+    if (topic_field_idx == topic_fields_.size()) {
+      switch ( msg.type() ) {
+        case MessageTypes::Float:
+          return msg.value<float>();
+          break;
+        case MessageTypes::Double:
+          return msg.value<double>();
+          break;
+        case MessageTypes::LongDouble:
+          return msg.value<long double>();
+          break;
 #pragma push_macro("Bool")
 #undef Bool
-              case MessageTypes::Bool:
-                return msg.value<bool>();
-                break;
+        case MessageTypes::Bool:
+          return msg.value<bool>();
+          break;
 #pragma pop_macro("Bool")
-              case MessageTypes::Octet:
-                return msg.value<uint8_t>();
-                break;
-              case MessageTypes::UInt8:
-                return msg.value<uint8_t>();
-                break;
-              case MessageTypes::Int8:
-                return msg.value<int8_t>();
-                break;
-              case MessageTypes::UInt16:
-                return msg.value<uint16_t>();
-                break;
-              case MessageTypes::Int16:
-                return msg.value<int16_t>();
-                break;
-              case MessageTypes::UInt32:
-                return msg.value<uint32_t>();
-                break;
-              case MessageTypes::Int32:
-                return msg.value<int32_t>();
-                break;
-              case MessageTypes::UInt64:
-                return msg.value<uint64_t>();
-                break;
-              case MessageTypes::Int64:
-                return msg.value<int64_t>();
-                break;
-              case MessageTypes::Compound:
-              {
-                auto &compound = msg.as<CompoundMessage>();
-                if ( compound.isTime() ) {
-                  return compound.value<rclcpp::Time>().seconds();
-                } else if ( compound.isDuration() ) {
-                  return compound.value<rclcpp::Duration>().seconds();
-                }
-                [[fallthrough]];
-              }
-              default:
-                throw BabelFishException("Field '" + topic_field_ + "' found, but not convertable to floating point representation");
-                break;
+        case MessageTypes::Octet:
+          return msg.value<uint8_t>();
+          break;
+        case MessageTypes::UInt8:
+          return msg.value<uint8_t>();
+          break;
+        case MessageTypes::Int8:
+          return msg.value<int8_t>();
+          break;
+        case MessageTypes::UInt16:
+          return msg.value<uint16_t>();
+          break;
+        case MessageTypes::Int16:
+          return msg.value<int16_t>();
+          break;
+        case MessageTypes::UInt32:
+          return msg.value<uint32_t>();
+          break;
+        case MessageTypes::Int32:
+          return msg.value<int32_t>();
+          break;
+        case MessageTypes::UInt64:
+          return msg.value<uint64_t>();
+          break;
+        case MessageTypes::Int64:
+          return msg.value<int64_t>();
+          break;
+        case MessageTypes::Compound:
+        {
+          auto &compound = msg.as<CompoundMessage>();
+          if ( compound.isTime() ) {
+            return compound.value<rclcpp::Time>().seconds();
+          } else if ( compound.isDuration() ) {
+            return compound.value<rclcpp::Duration>().seconds();
           }
+          [[fallthrough]];
+        }
+        default:
+          throw BabelFishException("Field '" + topic_field_ + "' found, but not convertable to floating point representation");
+          break;
       }
+    }
 
-      auto & compound = msg.as<CompoundMessage>();
-      const auto & field_name = topic_fields_[topic_field_idx];
-      if (!compound.containsKey(field_name)) {
-        throw BabelFishException("Field '" + field_name + "' of '" + topic_field_ + "' not found in message");
-      }
+    auto & compound = msg.as<CompoundMessage>();
+    const auto & field_name = topic_fields_[topic_field_idx];
+    if (!compound.containsKey(field_name)) {
+      throw BabelFishException("Field '" + field_name + "' of '" + topic_field_ + "' not found in message");
+    }
 
-      return recurseToField(compound[field_name], ++topic_field_idx);
+    return recurseToField(compound[field_name], ++topic_field_idx);
   }
 
   void Plotter2DDisplay::processMessage(ros_babel_fish::CompoundMessage::ConstSharedPtr msg)
@@ -443,7 +443,7 @@ namespace rviz_2d_overlay_plugins
     draw_required_ = true;
   }
 
-  void Plotter2DDisplay::update(float wall_dt, float ros_dt)
+  void Plotter2DDisplay::update(float wall_dt, float /*ros_dt*/)
   {
     if (draw_required_) {
       if (wall_dt + last_time_ > update_interval_) {
