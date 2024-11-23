@@ -1,6 +1,8 @@
+// -*- mode: c++; -*-
 /*
  * Copyright (c) 2012, Willow Garage, Inc.
  * Copyright (c) 2017, Bosch Software Innovations GmbH.
+ * Copyright (c) 2024, rcp1
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,142 +29,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef RVIZ_COMMON__ROS_TOPIC_DISPLAY_HPP_
-#define RVIZ_COMMON__ROS_TOPIC_DISPLAY_HPP_
+#ifndef JSK_RVIZ_PLUGINS_ROS_BABEL_FISH_TOPIC_DISPLAY_HPP_
+#define JSK_RVIZ_PLUGINS_ROS_BABEL_FISH_TOPIC_DISPLAY_HPP_
 
-#ifndef Q_MOC_RUN
+#include <ros_babel_fish/babel_fish.hpp>
+#include <rviz_common/ros_topic_display.hpp>
 
-#include <memory>
-#include <sstream>
-#include <string>
+namespace rviz_2d_overlay_plugins {
 
-#include <OgreSceneNode.h>
-#include <OgreSceneManager.h>
-
-#endif
-
-#include "rclcpp/qos.hpp"
-
-#include "rviz_common/display.hpp"
-#include "rviz_common/display_context.hpp"
-#include "frame_manager_iface.hpp"
-#include "rviz_common/properties/ros_topic_property.hpp"
-#include "rviz_common/properties/qos_profile_property.hpp"
-#include "rviz_common/properties/status_property.hpp"
-#include "rviz_common/ros_integration/ros_node_abstraction_iface.hpp"
-#include "rviz_common/visibility_control.hpp"
-
-// Required, in combination with
-// `qRegisterMetaType<std::shared_ptr<const void>>` so that this
-// type can be queued by Qt slots.
-// See: http://doc.qt.io/qt-5/qmetatype.html#qRegisterMetaType-1
-Q_DECLARE_METATYPE(std::shared_ptr<const void>)
-
-namespace rviz_common
-{
-
-/** @brief Helper superclass for RosTopicDisplay, needed because
- * Qt's moc and c++ templates don't work nicely together.  Not
- * intended to be used directly. */
-class RVIZ_COMMON_PUBLIC _RosTopicDisplay : public Display
-{
-  Q_OBJECT
-
-public:
-  _RosTopicDisplay()
-  : rviz_ros_node_(),
-    qos_profile(5)
-  {
-    qRegisterMetaType<std::shared_ptr<const void>>();
-
-    topic_property_ = new properties::RosTopicProperty(
-      "Topic", "",
-      "", "", this, SLOT(updateTopic()));
-
-    qos_profile_property_ = new properties::QosProfileProperty(topic_property_, qos_profile);
-  }
-
-  /**
-   * When overriding this method, the onInitialize() method of this superclass has to be called.
-   * Otherwise, the ros node will not be initialized.
-   */
-  void onInitialize() override
-  {
-    rviz_ros_node_ = context_->getRosNodeAbstraction();
-    topic_property_->initialize(rviz_ros_node_);
-
-    connect(
-      reinterpret_cast<QObject *>(context_->getTransformationManager()),
-      SIGNAL(transformerChanged(std::shared_ptr<rviz_common::transformation::FrameTransformer>)),
-      this,
-      SLOT(transformerChangedCallback()));
-    qos_profile_property_->initialize(
-      [this](rclcpp::QoS profile) {
-        this->qos_profile = profile;
-        updateTopic();
-      });
-
-    // Useful to _ROSTopicDisplay subclasses to ensure GUI updates
-    // are performed by the main thread only.
-    connect(
-      this,
-      SIGNAL(typeErasedMessageTaken(std::shared_ptr<const void>)),
-      this,
-      SLOT(processTypeErasedMessage(std::shared_ptr<const void>)),
-      // Force queued connections regardless of QObject thread affinity
-      Qt::QueuedConnection);
-  }
-
-Q_SIGNALS:
-  void typeErasedMessageTaken(std::shared_ptr<const void> type_erased_message);
-
-protected Q_SLOTS:
-  virtual void processTypeErasedMessage(std::shared_ptr<const void> type_erased_message)
-  {
-    (void)type_erased_message;
-  }
-
-  virtual void transformerChangedCallback()
-  {
-  }
-  virtual void updateMessageQueueSize()
-  {
-  }
-  virtual void updateTopic() = 0;
-
-protected:
-  /** @brief A Node which is registered with the main executor (used in the "update" thread).
-   *
-   * This is configured after the constructor within the initialize() method of Display. */
-  ros_integration::RosNodeAbstractionIface::WeakPtr rviz_ros_node_;
-  rclcpp::QoS qos_profile;
-  properties::RosTopicProperty * topic_property_;
-  properties::QosProfileProperty * qos_profile_property_;
-};
-
-/** @brief Display subclass using a rclcpp::subscription, templated on the ROS message type.
+/** @brief Display subclass using a compound ros_babel_fish::BabelFishSubscription.
  *
  * This class handles subscribing and unsubscribing to a ROS node when the display is
  * enabled or disabled. */
-template<class MessageType>
-class RosTopicDisplay : public _RosTopicDisplay
+class RosBabelFishTopicDisplay : public rviz_common::_RosTopicDisplay
 {
-// No Q_OBJECT macro here, moc does not support Q_OBJECT in a templated class.
-
 public:
-  /** @brief Convenience typedef so subclasses don't have to use
-   * the long templated class name to refer to their super class. */
-  typedef RosTopicDisplay<MessageType> RTDClass;
+  /** @brief Convenience typedef so subclasses don't have to change their implementation compared to
+   * templated topic display. */
+  typedef RosBabelFishTopicDisplay RTDClass;
 
-  RosTopicDisplay()
+  RosBabelFishTopicDisplay()
   : messages_received_(0)
   {
-    QString message_type = QString::fromStdString(rosidl_generator_traits::name<MessageType>());
-    topic_property_->setMessageType(message_type);
-    topic_property_->setDescription(message_type + " topic to subscribe to.");
   }
 
-  ~RosTopicDisplay() override
+  ~RosBabelFishTopicDisplay() override
   {
     unsubscribe();
   }
@@ -196,13 +87,14 @@ protected:
 
     if (topic_property_->isEmpty()) {
       setStatus(
-        properties::StatusProperty::Error,
+        rviz_common::properties::StatusProperty::Error,
         "Topic",
         QString("Error subscribing: Empty topic name"));
       return;
     }
 
     try {
+      auto fish = ros_babel_fish::BabelFish::make_shared();
       rclcpp::SubscriptionOptions sub_opts;
       sub_opts.event_callbacks.message_lost_callback =
         [&](rclcpp::QOSMessageLostInfo & info)
@@ -211,22 +103,23 @@ protected:
           sstm << "Some messages were lost:\n>\tNumber of new lost messages: " <<
             info.total_count_change << " \n>\tTotal number of messages lost: " <<
             info.total_count;
-          setStatus(properties::StatusProperty::Warn, "Topic", QString(sstm.str().c_str()));
+          setStatus(rviz_common::properties::StatusProperty::Warn, "Topic", QString(sstm.str().c_str()));
         };
 
-      // TODO(anhosi,wjwwood): replace with abstraction for subscriptions once available
       rclcpp::Node::SharedPtr node = rviz_ros_node_.lock()->get_raw_node();
       subscription_ =
-        node->template create_subscription<MessageType>(
+        fish->create_subscription(
+        *node,
         topic_property_->getTopicStd(),
         qos_profile,
-        [this](const typename MessageType::ConstSharedPtr message) {incomingMessage(message);},
+        [this](ros_babel_fish::CompoundMessage::ConstSharedPtr message) {incomingMessage(message);},
+        nullptr,
         sub_opts);
       subscription_start_time_ = node->now();
-      setStatus(properties::StatusProperty::Ok, "Topic", "OK");
+      setStatus(rviz_common::properties::StatusProperty::Ok, "Topic", "OK");
     } catch (rclcpp::exceptions::InvalidTopicNameError & e) {
       setStatus(
-        properties::StatusProperty::Error, "Topic",
+        rviz_common::properties::StatusProperty::Error, "Topic",
         QString("Error subscribing: ") + e.what());
     }
   }
@@ -255,7 +148,7 @@ protected:
   /** @brief Incoming message callback.  Checks if the message pointer
    * is valid, increments messages_received_, then calls
    * processMessage(). */
-  void incomingMessage(const typename MessageType::ConstSharedPtr msg)
+  void incomingMessage(ros_babel_fish::CompoundMessage::ConstSharedPtr msg)
   {
     if (!msg) {
       return;
@@ -264,7 +157,7 @@ protected:
     ++messages_received_;
     QString topic_str = QString::number(messages_received_) + " messages received";
     // Append topic subscription frequency if we can lock rviz_ros_node_.
-    std::shared_ptr<ros_integration::RosNodeAbstractionIface> node_interface =
+    std::shared_ptr<rviz_common::ros_integration::RosNodeAbstractionIface> node_interface =
       rviz_ros_node_.lock();
     if (node_interface != nullptr) {
       const double duration =
@@ -274,7 +167,7 @@ protected:
       topic_str += " at " + QString::number(subscription_frequency, 'f', 1) + " hz.";
     }
     setStatus(
-      properties::StatusProperty::Ok,
+      rviz_common::properties::StatusProperty::Ok,
       "Topic",
       topic_str);
 
@@ -284,13 +177,13 @@ protected:
   /** @brief Implement this to process the contents of a message.
    *
    * This is called by incomingMessage(). */
-  virtual void processMessage(typename MessageType::ConstSharedPtr msg) = 0;
+  virtual void processMessage(const ros_babel_fish::CompoundMessage::ConstSharedPtr msg) = 0;
 
-  typename rclcpp::Subscription<MessageType>::SharedPtr subscription_;
+  ros_babel_fish::BabelFishSubscription::SharedPtr subscription_;
   rclcpp::Time subscription_start_time_;
   uint32_t messages_received_;
 };
 
-}  // end namespace rviz_common
+}  // namespace rviz_2d_overlay_plugins
 
-#endif  // RVIZ_COMMON__ROS_TOPIC_DISPLAY_HPP_
+#endif // JSK_RVIZ_PLUGINS_ROS_BABEL_FISH_TOPIC_DISPLAY_HPP_

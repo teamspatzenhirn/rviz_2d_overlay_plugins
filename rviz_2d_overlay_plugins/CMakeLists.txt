@@ -6,6 +6,7 @@ find_package(ament_cmake REQUIRED)
 
 find_package(rviz_2d_overlay_msgs REQUIRED)
 
+find_package(ros_babel_fish REQUIRED)
 find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
 find_package(rviz_ogre_vendor REQUIRED)
@@ -68,6 +69,7 @@ pluginlib_export_plugin_description_file(rviz_common plugins_description.xml)
 ament_target_dependencies(
         ${PROJECT_NAME}
         PUBLIC
+        ros_babel_fish
         rviz_common
         rviz_rendering
         rviz_2d_overlay_msgs
