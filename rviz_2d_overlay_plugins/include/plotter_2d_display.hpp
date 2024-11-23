@@ -50,6 +50,7 @@
   #include <rviz_common/properties/color_property.hpp>
   #include <rviz_common/properties/float_property.hpp>
   #include <rviz_common/properties/int_property.hpp>
+  #include <rviz_common/properties/string_property.hpp>
   #include <rviz_common/properties/ros_topic_property.hpp>
 #endif
 
@@ -78,11 +79,13 @@ namespace rviz_2d_overlay_plugins
     virtual void onDisable();
     virtual void initializeBuffer();
     virtual void onInitialize();
+    virtual double recurseToField(const ros_babel_fish::Message & msg, size_t topic_field_idx);
     virtual void processMessage(ros_babel_fish::CompoundMessage::ConstSharedPtr msg) override;
     virtual void drawPlot();
     ////////////////////////////////////////////////////////
     // properties
     ////////////////////////////////////////////////////////
+    rviz_common::properties::StringProperty* topic_field_property_;
     rviz_common::properties::BoolProperty* show_value_property_;
     rviz_common::properties::ColorProperty* fg_color_property_;
     rviz_common::properties::ColorProperty* bg_color_property_;
@@ -106,6 +109,8 @@ namespace rviz_2d_overlay_plugins
     rviz_common::properties::BoolProperty* auto_text_size_in_plot_property_;
     rviz_common::properties::IntProperty* text_size_in_plot_property_;
 
+    std::string topic_field_;
+    std::vector<std::string> topic_fields_;
     rviz_2d_overlay_plugins::OverlayObject::SharedPtr overlay_;
     QColor fg_color_;
     QColor max_color_;
@@ -142,6 +147,7 @@ namespace rviz_2d_overlay_plugins
     std::mutex mutex_;
 
   protected Q_SLOTS:
+    void updateTopicField();
     void updateShowValue();
     void updateBufferSize();
     void updateBGColor();

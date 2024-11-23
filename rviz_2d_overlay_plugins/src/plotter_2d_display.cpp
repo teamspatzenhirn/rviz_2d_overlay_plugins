@@ -46,6 +46,10 @@ namespace rviz_2d_overlay_plugins
   Plotter2DDisplay::Plotter2DDisplay()
     : min_value_(0.0), max_value_(0.0)
   {
+    topic_field_property_ = new rviz_common::properties::StringProperty(
+      "Topic Field", "",
+      "Topic field to display in plotter window",
+      this, SLOT(updateTopicField()));
     show_value_property_ = new rviz_common::properties::BoolProperty(
       "Show Value", true,
       "Show value on plotter",
@@ -194,6 +198,7 @@ namespace rviz_2d_overlay_plugins
     overlay_.reset(new OverlayObject(ss.str()));
     updateBufferSize();
     onEnable();
+    updateTopicField();
     updateShowValue();
     updateWidth();
     updateHeight();
@@ -319,6 +324,79 @@ namespace rviz_2d_overlay_plugins
     }
   }
 
+  double Plotter2DDisplay::recurseToField(const ros_babel_fish::Message& msg, size_t topic_field_idx)
+  {
+      using namespace ros_babel_fish;
+
+      if (topic_field_idx == topic_fields_.size()) {
+          switch ( msg.type() ) {
+              case MessageTypes::Float:
+                return msg.value<float>();
+                break;
+              case MessageTypes::Double:
+                return msg.value<double>();
+                break;
+              case MessageTypes::LongDouble:
+                return msg.value<long double>();
+                break;
+#pragma push_macro("Bool")
+#undef Bool
+              case MessageTypes::Bool:
+                return msg.value<bool>();
+                break;
+#pragma pop_macro("Bool")
+              case MessageTypes::Octet:
+                return msg.value<uint8_t>();
+                break;
+              case MessageTypes::UInt8:
+                return msg.value<uint8_t>();
+                break;
+              case MessageTypes::Int8:
+                return msg.value<int8_t>();
+                break;
+              case MessageTypes::UInt16:
+                return msg.value<uint16_t>();
+                break;
+              case MessageTypes::Int16:
+                return msg.value<int16_t>();
+                break;
+              case MessageTypes::UInt32:
+                return msg.value<uint32_t>();
+                break;
+              case MessageTypes::Int32:
+                return msg.value<int32_t>();
+                break;
+              case MessageTypes::UInt64:
+                return msg.value<uint64_t>();
+                break;
+              case MessageTypes::Int64:
+                return msg.value<int64_t>();
+                break;
+              case MessageTypes::Compound:
+              {
+                auto &compound = msg.as<CompoundMessage>();
+                if ( compound.isTime() ) {
+                  return compound.value<rclcpp::Time>().seconds();
+                } else if ( compound.isDuration() ) {
+                  return compound.value<rclcpp::Duration>().seconds();
+                }
+                [[fallthrough]];
+              }
+              default:
+                throw BabelFishException("Field '" + topic_field_ + "' found, but not convertable to floating point representation");
+                break;
+          }
+      }
+
+      auto & compound = msg.as<CompoundMessage>();
+      const auto & field_name = topic_fields_[topic_field_idx];
+      if (!compound.containsKey(field_name)) {
+        throw BabelFishException("Field '" + field_name + "' of '" + topic_field_ + "' not found in message");
+      }
+
+      return recurseToField(compound[field_name], ++topic_field_idx);
+  }
+
   void Plotter2DDisplay::processMessage(ros_babel_fish::CompoundMessage::ConstSharedPtr msg)
   {
     std::scoped_lock lock(mutex_);
@@ -327,9 +405,24 @@ namespace rviz_2d_overlay_plugins
       return;
     }
 
-    // transform compound message to double signal
-    const ros_babel_fish::CompoundMessage &compound = *msg;
-    auto data = compound.value<double>();
+    if (topic_fields_.empty()) {
+      setStatus(
+        rviz_common::properties::StatusProperty::Error,
+        "Topic",
+        QString("Error parsing: Empty topic field"));
+      return;
+    }
+
+    double data{0.0};
+    try {
+      data = recurseToField(*msg, 0);
+    } catch (ros_babel_fish::BabelFishException &e) {
+      setStatus(
+        rviz_common::properties::StatusProperty::Error,
+        "Topic",
+        QString::fromStdString(std::string{"Error parsing: "} + e.what()));
+      return;
+    }
 
     // add the message to the buffer
     double min_value = buffer_[0];
@@ -437,6 +530,18 @@ namespace rviz_2d_overlay_plugins
   void Plotter2DDisplay::updateBGAlpha()
   {
     bg_alpha_ = bg_alpha_property_->getFloat() * 255.0;
+  }
+
+  void Plotter2DDisplay::updateTopicField()
+  {
+    topic_field_ = topic_field_property_->getString().toStdString();
+    std::stringstream ss(topic_field_);
+    std::string sub_field;
+
+    topic_fields_.clear();
+    while (std::getline(ss, sub_field, '.')) {
+      topic_fields_.push_back(sub_field);
+    }
   }
 
   void Plotter2DDisplay::updateShowValue()
