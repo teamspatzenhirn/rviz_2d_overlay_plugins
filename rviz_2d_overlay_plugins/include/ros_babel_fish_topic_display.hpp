@@ -115,17 +115,22 @@ protected:
         };
 
       rclcpp::Node::SharedPtr node = rviz_ros_node_.lock()->get_raw_node();
-      subscription_ =
-        fish->create_subscription(
-        *node,
-        topic_property_->getTopicStd(),
-        topic_property_->getMessageType().toStdString(),
-        qos_profile,
-        [this](ros_babel_fish::CompoundMessage::ConstSharedPtr message) {incomingMessage(message);},
-        nullptr,
-        sub_opts);
-      subscription_start_time_ = node->now();
-      setStatus(rviz_common::properties::StatusProperty::Ok, "Topic", "OK");
+      try {
+        subscription_ =
+          fish->create_subscription(
+          *node,
+          topic_property_->getTopicStd(),
+          topic_property_->getMessageType().toStdString(),
+          qos_profile,
+          [this](ros_babel_fish::CompoundMessage::ConstSharedPtr message) {incomingMessage(message);},
+          nullptr,
+          sub_opts);
+        subscription_start_time_ = node->now();
+        setStatus(rviz_common::properties::StatusProperty::Ok, "Topic", "OK");
+      } catch (ros_babel_fish::BabelFishException & e) {
+        setStatus(rviz_common::properties::StatusProperty::Error, "Topic",
+        QString("Error subscribing: ") + e.what());
+      }
     } catch (rclcpp::exceptions::InvalidTopicNameError & e) {
       setStatus(
         rviz_common::properties::StatusProperty::Error, "Topic",
