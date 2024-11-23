@@ -121,7 +121,7 @@ namespace rviz_2d_overlay_plugins
                                                 "text size of the caption",
                                                 this, SLOT(updateTextSize()));
     auto_text_size_in_plot_property_ = new rviz_common::properties::BoolProperty("auto text size in plot", true,
-                                                              "automatiacally adjust text size of the value in plot",
+                                                              "automatically adjust text size of the value in plot",
                                                               this, SLOT(updateAutoTextSizeInPlot()));
     text_size_in_plot_property_ = new rviz_common::properties::IntProperty("text size in plot", 12,
                                                         "text size of the value in plot",
