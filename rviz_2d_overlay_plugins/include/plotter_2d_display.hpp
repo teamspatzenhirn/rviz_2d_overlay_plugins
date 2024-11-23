@@ -38,6 +38,7 @@
 
 #include <mutex>
 
+#include "ros_babel_fish_topic_display.hpp"
 #include "std_msgs/msg/float32.hpp"
 #ifndef Q_MOC_RUN
   #include <rviz_common/display.hpp>
@@ -50,14 +51,13 @@
   #include <rviz_common/properties/float_property.hpp>
   #include <rviz_common/properties/int_property.hpp>
   #include <rviz_common/properties/ros_topic_property.hpp>
-  #include <rviz_common/ros_topic_display.hpp>
 #endif
 
 namespace rviz_2d_overlay_plugins
 {
 
   class Plotter2DDisplay
-    : public rviz_common::RosTopicDisplay<std_msgs::msg::Float32>
+    : public RosBabelFishTopicDisplay
   {
     Q_OBJECT
   public:
@@ -78,7 +78,7 @@ namespace rviz_2d_overlay_plugins
     virtual void onDisable();
     virtual void initializeBuffer();
     virtual void onInitialize();
-    virtual void processMessage(std_msgs::msg::Float32::ConstSharedPtr msg) override;
+    virtual void processMessage(ros_babel_fish::CompoundMessage::ConstSharedPtr msg) override;
     virtual void drawPlot();
     ////////////////////////////////////////////////////////
     // properties

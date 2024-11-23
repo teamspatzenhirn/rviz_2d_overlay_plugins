@@ -319,13 +319,18 @@ namespace rviz_2d_overlay_plugins
     }
   }
 
-  void Plotter2DDisplay::processMessage(std_msgs::msg::Float32::ConstSharedPtr msg)
+  void Plotter2DDisplay::processMessage(ros_babel_fish::CompoundMessage::ConstSharedPtr msg)
   {
     std::scoped_lock lock(mutex_);
 
     if (!isEnabled()) {
       return;
     }
+
+    // transform compound message to double signal
+    const ros_babel_fish::CompoundMessage &compound = *msg;
+    auto data = compound.value<double>();
+
     // add the message to the buffer
     double min_value = buffer_[0];
     double max_value = buffer_[0];
@@ -338,12 +343,12 @@ namespace rviz_2d_overlay_plugins
         max_value = buffer_[i];
       }
     }
-    buffer_[buffer_length_ - 1] = msg->data;
-    if (min_value > msg->data) {
-      min_value = msg->data;
+    buffer_[buffer_length_ - 1] = data;
+    if (min_value > data) {
+      min_value = data;
     }
-    if (max_value < msg->data) {
-      max_value = msg->data;
+    if (max_value < data) {
+      max_value = data;
     }
     if (auto_scale_) {
       min_value_ = min_value;
