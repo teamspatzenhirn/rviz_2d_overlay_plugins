@@ -46,105 +46,109 @@ namespace rviz_2d_overlay_plugins
   Plotter2DDisplay::Plotter2DDisplay()
     : min_value_(0.0), max_value_(0.0)
   {
-    topic_field_property_ = new rviz_common::properties::StringProperty(
+    topic_message_type_property_ = std::make_unique<rviz_common::properties::StringProperty>(
+      "Topic Message Type", "",
+      "Topic message type to subscribe to",
+      this, SLOT(updateTopicMessageType()));
+    topic_field_property_ = std::make_unique<rviz_common::properties::StringProperty>(
       "Topic Field", "",
       "Topic field to display in plotter window",
       this, SLOT(updateTopicField()));
-    show_value_property_ = new rviz_common::properties::BoolProperty(
+    show_value_property_ = std::make_unique<rviz_common::properties::BoolProperty>(
       "Show Value", true,
       "Show value on plotter",
       this, SLOT(updateShowValue()));
-    buffer_length_property_ = new rviz_common::properties::IntProperty(
+    buffer_length_property_ = std::make_unique<rviz_common::properties::IntProperty>(
       "Buffer length", 100,
       "Buffer length for plotter",
       this, SLOT(updateBufferSize()));
-    width_property_ = new rviz_common::properties::IntProperty("width", 128,
+    width_property_ = std::make_unique<rviz_common::properties::IntProperty>("width", 128,
                                             "width of the plotter window",
                                             this, SLOT(updateWidth()));
     width_property_->setMin(1);
     width_property_->setMax(2000);
-    height_property_ = new rviz_common::properties::IntProperty("height", 128,
+    height_property_ = std::make_unique<rviz_common::properties::IntProperty>("height", 128,
                                              "height of the plotter window",
                                              this, SLOT(updateHeight()));
     height_property_->setMin(1);
     height_property_->setMax(2000);
-    left_property_ = new rviz_common::properties::IntProperty("left", 128,
+    left_property_ = std::make_unique<rviz_common::properties::IntProperty>("left", 128,
                                            "left of the plotter window",
                                            this, SLOT(updateLeft()));
     left_property_->setMin(0);
-    top_property_ = new rviz_common::properties::IntProperty("top", 128,
+    top_property_ = std::make_unique<rviz_common::properties::IntProperty>("top", 128,
                                           "top of the plotter window",
                                           this, SLOT(updateTop()));
     top_property_->setMin(0);
-    auto_scale_property_ = new rviz_common::properties::BoolProperty(
+    auto_scale_property_ = std::make_unique<rviz_common::properties::BoolProperty>(
       "auto scale", true,
       "enable auto scale",
       this, SLOT(updateAutoScale()));
-    max_value_property_ = new rviz_common::properties::FloatProperty(
+    max_value_property_ = std::make_unique<rviz_common::properties::FloatProperty>(
       "max value", 1.0,
       "max value, used only if auto scale is disabled",
       this, SLOT(updateMaxValue()));
-    min_value_property_ = new rviz_common::properties::FloatProperty(
+    min_value_property_ = std::make_unique<rviz_common::properties::FloatProperty>(
       "min value", -1.0,
       "min value, used only if auto scale is disabled",
       this, SLOT(updateMinValue()));
-    fg_color_property_ = new rviz_common::properties::ColorProperty(
+    fg_color_property_ = std::make_unique<rviz_common::properties::ColorProperty>(
       "foreground color", QColor(25, 255, 240),
       "color to draw line",
       this, SLOT(updateFGColor()));
-    fg_alpha_property_ = new rviz_common::properties::FloatProperty(
+    fg_alpha_property_ = std::make_unique<rviz_common::properties::FloatProperty>(
       "foreground alpha", 0.7,
       "alpha belnding value for foreground",
       this, SLOT(updateFGAlpha()));
     fg_alpha_property_->setMin(0);
     fg_alpha_property_->setMax(1.0);
-    bg_color_property_ = new rviz_common::properties::ColorProperty(
+    bg_color_property_ = std::make_unique<rviz_common::properties::ColorProperty>(
       "background color", QColor(0, 0, 0),
       "background color",
       this, SLOT(updateBGColor()));
-    bg_alpha_property_ = new rviz_common::properties::FloatProperty(
+    bg_alpha_property_ = std::make_unique<rviz_common::properties::FloatProperty>(
       "backround alpha", 0.0,
       "alpha belnding value for background",
       this, SLOT(updateBGAlpha()));
     bg_alpha_property_->setMin(0);
     bg_alpha_property_->setMax(1.0);
-    line_width_property_ = new rviz_common::properties::IntProperty("linewidth", 1,
+    line_width_property_ = std::make_unique<rviz_common::properties::IntProperty>("linewidth", 1,
                                                  "linewidth of the plot",
                                                  this, SLOT(updateLineWidth()));
     line_width_property_->setMin(1);
     line_width_property_->setMax(1000);
-    show_border_property_ = new rviz_common::properties::BoolProperty(
+    show_border_property_ = std::make_unique<rviz_common::properties::BoolProperty>(
       "border", true,
       "show border or not",
       this, SLOT(updateShowBorder()));
-    text_size_property_ = new rviz_common::properties::IntProperty("text size", 12,
+    text_size_property_ = std::make_unique<rviz_common::properties::IntProperty>("text size", 12,
                                                 "text size of the caption",
                                                 this, SLOT(updateTextSize()));
-    auto_text_size_in_plot_property_ = new rviz_common::properties::BoolProperty("auto text size in plot", true,
+    auto_text_size_in_plot_property_ = std::make_unique<rviz_common::properties::BoolProperty>("auto text size in plot", true,
                                                               "automatically adjust text size of the value in plot",
                                                               this, SLOT(updateAutoTextSizeInPlot()));
-    text_size_in_plot_property_ = new rviz_common::properties::IntProperty("text size in plot", 12,
+    text_size_in_plot_property_ = std::make_unique<rviz_common::properties::IntProperty>("text size in plot", 12,
                                                         "text size of the value in plot",
                                                         this, SLOT(updateTextSizeInPlot()));
     text_size_property_->setMin(1);
     text_size_property_->setMax(1000);
-    show_caption_property_ = new rviz_common::properties::BoolProperty(
+    show_caption_property_ = std::make_unique<rviz_common::properties::BoolProperty>(
       "show caption", true,
       "show caption or not",
       this, SLOT(updateShowCaption()));
-    update_interval_property_ = new rviz_common::properties::FloatProperty(
+    update_interval_property_ = std::make_unique<rviz_common::properties::FloatProperty>(
       "update interval", 0.04,
       "update interval of the plotter",
       this, SLOT(updateUpdateInterval()));
     update_interval_property_->setMin(0.0);
     update_interval_property_->setMax(100);
     auto_color_change_property_
-      = new rviz_common::properties::BoolProperty("auto color change",
+      = std::make_unique<rviz_common::properties::BoolProperty>("auto color change",
                                false,
                                "change the color automatically",
                                this, SLOT(updateAutoColorChange()));
     max_color_property_
-      = new rviz_common::properties::ColorProperty(
+      = std::make_unique<rviz_common::properties::ColorProperty>(
         "max color",
         QColor(255, 0, 0),
         "only used if auto color change is set to True.",
@@ -154,26 +158,6 @@ namespace rviz_2d_overlay_plugins
   Plotter2DDisplay::~Plotter2DDisplay()
   {
     onDisable();
-    // delete update_topic_property_;
-    // delete buffer_length_property_;
-    // delete fg_color_property_;
-    // delete bg_color_property_;
-    // delete fg_alpha_property_;
-    // delete bg_alpha_property_;
-    // delete top_property_;
-    // delete left_property_;
-    // delete width_property_;
-    // delete height_property_;
-    // delete line_width_property_;
-    // delete show_border_property_;
-    // delete auto_color_change_property_;
-    // delete max_color_property_;
-    // delete update_interval_property_;
-    // delete show_caption_property_;
-    // delete text_size_property_;
-    // delete min_value_property_;
-    // delete max_value_property_;
-    // delete auto_color_change_property_;
   }
 
   void Plotter2DDisplay::initializeBuffer()
@@ -195,9 +179,10 @@ namespace rviz_2d_overlay_plugins
     static int count = 0;
     rviz_common::UniformStringStream ss;
     ss << "Plotter2DDisplayObject" << count++;
-    overlay_.reset(new OverlayObject(ss.str()));
+    overlay_ = std::make_shared<OverlayObject>(ss.str());
     updateBufferSize();
     onEnable();
+    updateTopicMessageType();
     updateTopicField();
     updateShowValue();
     updateWidth();
@@ -530,6 +515,13 @@ namespace rviz_2d_overlay_plugins
   void Plotter2DDisplay::updateBGAlpha()
   {
     bg_alpha_ = bg_alpha_property_->getFloat() * 255.0;
+  }
+
+  void Plotter2DDisplay::updateTopicMessageType()
+  {
+    topic_message_type_ = topic_message_type_property_->getString();
+    topic_property_->setMessageType(topic_message_type_);
+    updateTopic();
   }
 
   void Plotter2DDisplay::updateTopicField()

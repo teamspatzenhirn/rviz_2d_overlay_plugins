@@ -85,30 +85,32 @@ namespace rviz_2d_overlay_plugins
     ////////////////////////////////////////////////////////
     // properties
     ////////////////////////////////////////////////////////
-    rviz_common::properties::StringProperty* topic_field_property_;
-    rviz_common::properties::BoolProperty* show_value_property_;
-    rviz_common::properties::ColorProperty* fg_color_property_;
-    rviz_common::properties::ColorProperty* bg_color_property_;
-    rviz_common::properties::FloatProperty* fg_alpha_property_;
-    rviz_common::properties::FloatProperty* bg_alpha_property_;
-    rviz_common::properties::FloatProperty* update_interval_property_;
-    rviz_common::properties::BoolProperty* show_border_property_;
-    rviz_common::properties::IntProperty* buffer_length_property_;
-    rviz_common::properties::IntProperty* width_property_;
-    rviz_common::properties::IntProperty* height_property_;
-    rviz_common::properties::IntProperty* left_property_;
-    rviz_common::properties::IntProperty* top_property_;
-    rviz_common::properties::IntProperty* line_width_property_;
-    rviz_common::properties::BoolProperty* auto_color_change_property_;
-    rviz_common::properties::ColorProperty* max_color_property_;
-    rviz_common::properties::BoolProperty* show_caption_property_;
-    rviz_common::properties::IntProperty* text_size_property_;
-    rviz_common::properties::BoolProperty* auto_scale_property_;
-    rviz_common::properties::FloatProperty* max_value_property_;
-    rviz_common::properties::FloatProperty* min_value_property_;
-    rviz_common::properties::BoolProperty* auto_text_size_in_plot_property_;
-    rviz_common::properties::IntProperty* text_size_in_plot_property_;
+    std::unique_ptr<rviz_common::properties::StringProperty> topic_message_type_property_;
+    std::unique_ptr<rviz_common::properties::StringProperty> topic_field_property_;
+    std::unique_ptr<rviz_common::properties::BoolProperty> show_value_property_;
+    std::unique_ptr<rviz_common::properties::ColorProperty> fg_color_property_;
+    std::unique_ptr<rviz_common::properties::ColorProperty> bg_color_property_;
+    std::unique_ptr<rviz_common::properties::FloatProperty> fg_alpha_property_;
+    std::unique_ptr<rviz_common::properties::FloatProperty> bg_alpha_property_;
+    std::unique_ptr<rviz_common::properties::FloatProperty> update_interval_property_;
+    std::unique_ptr<rviz_common::properties::BoolProperty> show_border_property_;
+    std::unique_ptr<rviz_common::properties::IntProperty> buffer_length_property_;
+    std::unique_ptr<rviz_common::properties::IntProperty> width_property_;
+    std::unique_ptr<rviz_common::properties::IntProperty> height_property_;
+    std::unique_ptr<rviz_common::properties::IntProperty> left_property_;
+    std::unique_ptr<rviz_common::properties::IntProperty> top_property_;
+    std::unique_ptr<rviz_common::properties::IntProperty> line_width_property_;
+    std::unique_ptr<rviz_common::properties::BoolProperty> auto_color_change_property_;
+    std::unique_ptr<rviz_common::properties::ColorProperty> max_color_property_;
+    std::unique_ptr<rviz_common::properties::BoolProperty> show_caption_property_;
+    std::unique_ptr<rviz_common::properties::IntProperty> text_size_property_;
+    std::unique_ptr<rviz_common::properties::BoolProperty> auto_scale_property_;
+    std::unique_ptr<rviz_common::properties::FloatProperty> max_value_property_;
+    std::unique_ptr<rviz_common::properties::FloatProperty> min_value_property_;
+    std::unique_ptr<rviz_common::properties::BoolProperty> auto_text_size_in_plot_property_;
+    std::unique_ptr<rviz_common::properties::IntProperty> text_size_in_plot_property_;
 
+    QString topic_message_type_;
     std::string topic_field_;
     std::vector<std::string> topic_fields_;
     rviz_2d_overlay_plugins::OverlayObject::SharedPtr overlay_;
@@ -147,6 +149,7 @@ namespace rviz_2d_overlay_plugins
     std::mutex mutex_;
 
   protected Q_SLOTS:
+    void updateTopicMessageType();
     void updateTopicField();
     void updateShowValue();
     void updateBufferSize();

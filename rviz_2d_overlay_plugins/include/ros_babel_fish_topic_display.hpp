@@ -93,6 +93,14 @@ protected:
       return;
     }
 
+    if (topic_property_->getMessageType().isEmpty()) {
+      setStatus(
+        rviz_common::properties::StatusProperty::Error,
+        "Topic",
+        QString("Error subscribing: Empty topic message type"));
+      return;
+    }
+
     try {
       auto fish = ros_babel_fish::BabelFish::make_shared();
       rclcpp::SubscriptionOptions sub_opts;
@@ -111,6 +119,7 @@ protected:
         fish->create_subscription(
         *node,
         topic_property_->getTopicStd(),
+        topic_property_->getMessageType().toStdString(),
         qos_profile,
         [this](ros_babel_fish::CompoundMessage::ConstSharedPtr message) {incomingMessage(message);},
         nullptr,
