@@ -2,8 +2,8 @@
 Changelog for package rviz_2d_overlay_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.3.1 (2025-06-01)
+------------------
 * Replace ament_target_dependencies with target_link_libraries ([#22](https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/22))
 * use less custom package docs with sphinx instead of doxygen ([#19](https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/19))
 * Contributors: Alejandro Hernandez Cordero, Jonas Otto
