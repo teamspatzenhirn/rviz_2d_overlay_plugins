@@ -29,7 +29,11 @@ set(
 )
 
 add_executable(string_to_overlay_text src/string_to_overlay_text.cpp)
-ament_target_dependencies(string_to_overlay_text rclcpp std_msgs rviz_2d_overlay_msgs)
+target_link_libraries(string_to_overlay_text
+        rclcpp::rclcpp
+        ${std_msgs_TARGETS}
+        ${rviz_2d_overlay_msgs_TARGETS}
+)
 
 add_library(
         ${PROJECT_NAME} SHARED
@@ -52,6 +56,10 @@ target_link_libraries(
         ${PROJECT_NAME} PUBLIC
         rviz_ogre_vendor::OgreMain
         rviz_ogre_vendor::OgreOverlay
+        rviz_common::rviz_common
+        rviz_rendering::rviz_rendering
+        ${std_msgs_TARGETS}
+        ${rviz_2d_overlay_msgs_TARGETS}
 )
 
 # Causes the visibility macros to use dllexport rather than dllimport,
@@ -62,15 +70,6 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE "${PROJECT_NAME}_BUILDING_LIB
 target_compile_definitions(${PROJECT_NAME} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 pluginlib_export_plugin_description_file(rviz_common plugins_description.xml)
-
-ament_target_dependencies(
-        ${PROJECT_NAME}
-        PUBLIC
-        rviz_common
-        rviz_rendering
-        rviz_2d_overlay_msgs
-        std_msgs
-)
 
 ament_export_include_directories(include)
 ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
