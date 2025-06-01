@@ -2,6 +2,12 @@
 Changelog for package rviz_2d_overlay_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Replace ament_target_dependencies with target_link_libraries ([#22](https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/22))
+* use less custom package docs with sphinx instead of doxygen ([#19](https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/19))
+* Contributors: Alejandro Hernandez Cordero, Jonas Otto
+
 1.3.0 (2023-05-18)
 ------------------
 * Added string to overlay text converter node
