@@ -13,8 +13,8 @@ find_package(std_msgs REQUIRED)
 
 set(
         headers_to_moc
-        include/overlay_text_display.hpp
-        include/pie_chart_display.h
+        include/rviz_2d_overlay_plugins/overlay_text_display.hpp
+        include/rviz_2d_overlay_plugins/pie_chart_display.h
 )
 
 foreach (header "${headers_to_moc}")

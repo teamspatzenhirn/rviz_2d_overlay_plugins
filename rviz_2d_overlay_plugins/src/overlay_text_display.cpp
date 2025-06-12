@@ -34,7 +34,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-#include "overlay_text_display.hpp"
+#include <rviz_2d_overlay_plugins/overlay_text_display.hpp>
 
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreMaterialManager.h>
