@@ -2,6 +2,9 @@
 Changelog for package rviz_2d_overlay_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.1 (2025-06-01)
+------------------
+
 1.3.0 (2023-05-18)
 ------------------
 * Removed old position message fields
