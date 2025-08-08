@@ -34,7 +34,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-#include "pie_chart_display.h"
+#include <rviz_2d_overlay_plugins/pie_chart_display.h>
 
 #include <OgreMaterialManager.h>
 #include <OgreTextureManager.h>
