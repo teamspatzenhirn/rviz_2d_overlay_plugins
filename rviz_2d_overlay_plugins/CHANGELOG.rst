@@ -2,8 +2,8 @@
 Changelog for package rviz_2d_overlay_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.4.0 (2025-11-11)
+------------------
 * Match include directory structure with ROS standards ([#23](https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/23))
 * Contributors: Ryohsuke Mitsudome
 
