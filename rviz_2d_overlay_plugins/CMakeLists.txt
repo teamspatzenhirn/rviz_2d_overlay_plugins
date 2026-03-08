@@ -6,6 +6,8 @@ find_package(ament_cmake REQUIRED)
 
 find_package(rviz_2d_overlay_msgs REQUIRED)
 
+find_package(Qt5 REQUIRED COMPONENTS Widgets)
+
 find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
 find_package(rviz_ogre_vendor REQUIRED)
