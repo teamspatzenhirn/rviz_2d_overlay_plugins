@@ -241,7 +241,7 @@ namespace rviz_2d_overlay_plugins {
                     QStaticText only_wrapped_text(color_wrapped_text.c_str());
                     QFontMetrics fm(painter.fontMetrics());
                     QRect text_rect = fm.boundingRect(0, 0, w, h, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignTop,
-                                                      only_wrapped_text.text().remove(QRegExp("<[^>]*>")));
+                                                      only_wrapped_text.text().remove(QRegularExpression("<[^>]*>")));
                     painter.drawStaticText(1, h - text_rect.height() + 1, static_shadow);
                     painter.drawStaticText(0, h - text_rect.height(), static_text);
                 }

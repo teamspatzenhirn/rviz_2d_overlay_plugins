@@ -17,9 +17,7 @@ set(
         include/rviz_2d_overlay_plugins/pie_chart_display.h
 )
 
-foreach (header "${headers_to_moc}")
-    qt5_wrap_cpp(display_moc_files "${header}")
-endforeach ()
+set(CMAKE_AUTOMOC ON)
 
 set(
         display_source_files
