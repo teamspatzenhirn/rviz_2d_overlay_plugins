@@ -43,6 +43,7 @@
 #include <QPainter>
 #include <QStaticText>
 #include <QTextDocument>
+#include <QRegularExpression>
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <regex>
