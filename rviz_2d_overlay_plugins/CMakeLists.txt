@@ -11,12 +11,6 @@ find_package(rviz_rendering REQUIRED)
 find_package(rviz_ogre_vendor REQUIRED)
 find_package(std_msgs REQUIRED)
 
-set(
-        headers_to_moc
-        include/rviz_2d_overlay_plugins/overlay_text_display.hpp
-        include/rviz_2d_overlay_plugins/pie_chart_display.h
-)
-
 set(CMAKE_AUTOMOC ON)
 
 set(
