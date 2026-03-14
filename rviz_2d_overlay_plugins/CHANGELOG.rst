@@ -2,8 +2,8 @@
 Changelog for package rviz_2d_overlay_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.4.1 (2026-03-14)
+------------------
 * added missing QRegularExpression include for jazzy `#25 <https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/25>`_
 * removed unused headers_to_moc var `#25 <https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/25>`_
 * enable automoc `#25 <https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/25>`_
