@@ -11,15 +11,7 @@ find_package(rviz_rendering REQUIRED)
 find_package(rviz_ogre_vendor REQUIRED)
 find_package(std_msgs REQUIRED)
 
-set(
-        headers_to_moc
-        include/rviz_2d_overlay_plugins/overlay_text_display.hpp
-        include/rviz_2d_overlay_plugins/pie_chart_display.h
-)
-
-foreach (header "${headers_to_moc}")
-    qt5_wrap_cpp(display_moc_files "${header}")
-endforeach ()
+set(CMAKE_AUTOMOC ON)
 
 set(
         display_source_files
