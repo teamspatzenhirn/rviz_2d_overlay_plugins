@@ -6,9 +6,12 @@ find_package(ament_cmake REQUIRED)
 
 find_package(rviz_2d_overlay_msgs REQUIRED)
 
-find_package(Qt6 COMPONENTS Widgets)
+find_package(Qt6 QUIET COMPONENTS Widgets)
 if (NOT QT6_FOUND)
-    find_package(Qt5 REQUIRED COMPONENTS Widgets)
+    find_package(Qt5 QUIET COMPONENTS Widgets)
+	if (NOT QT5_FOUND)
+		message( FATAL_ERROR "Neither QT6 nor QT5 was found!" )
+	endif()
 endif()
 
 find_package(rviz_common REQUIRED)
