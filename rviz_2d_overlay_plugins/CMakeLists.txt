@@ -12,6 +12,9 @@ if (NOT Qt6_FOUND)
 	if (NOT Qt5_FOUND)
 		message( FATAL_ERROR "Neither QT6 nor QT5 was found!" )
 	endif()
+    set(qt_widgets_target Qt5::Widgets)
+else()
+    set(qt_widgets_target Qt6::Widgets)
 endif()
 
 find_package(rviz_common REQUIRED)
@@ -58,6 +61,7 @@ target_link_libraries(
         rviz_ogre_vendor::OgreOverlay
         rviz_common::rviz_common
         rviz_rendering::rviz_rendering
+        ${qt_widgets_target}
         ${std_msgs_TARGETS}
         ${rviz_2d_overlay_msgs_TARGETS}
 )
