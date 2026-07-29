@@ -85,7 +85,7 @@ namespace rviz_2d_overlay_plugins {
         virtual void onInitialize() override;
         virtual void onEnable() override;
         virtual void onDisable() override;
-        virtual void update(float wall_dt, float ros_dt) override;
+        virtual void update(std::chrono::nanoseconds wall_dt, std::chrono::nanoseconds ros_dt) override;
         virtual void reset() override;
 
         bool require_update_texture_;
