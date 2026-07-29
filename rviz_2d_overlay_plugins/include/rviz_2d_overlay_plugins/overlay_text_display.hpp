@@ -40,6 +40,7 @@
 #ifndef Q_MOC_RUN
     #include <OgreColourValue.h>
     #include <OgreMaterial.h>
+    #include <rclcpp/version.h>
     #include <rviz_common/properties/bool_property.hpp>
     #include <rviz_common/properties/color_property.hpp>
     #include <rviz_common/properties/enum_property.hpp>
@@ -85,10 +86,18 @@ namespace rviz_2d_overlay_plugins {
         virtual void onInitialize() override;
         virtual void onEnable() override;
         virtual void onDisable() override;
-        virtual void update(std::chrono::nanoseconds wall_dt, std::chrono::nanoseconds ros_dt) override;
         virtual void reset() override;
 
-        bool require_update_texture_;
+	// unfortunately necessary due to breaking changes to the message signature
+#if RCLCPP_VERSION_GTE(32, 0, 0)
+	// lyrical and newer
+	using Duration = std::chrono::nanoseconds;
+#else
+	using Duration = float; 
+#endif
+	virtual void update(Duration wall_dt, Duration ros_dt) override;
+
+     	bool require_update_texture_;
         // properties are raw pointers since they are owned by Qt
         rviz_common::properties::BoolProperty *overtake_position_properties_property_;
         rviz_common::properties::BoolProperty *overtake_fg_color_properties_property_;

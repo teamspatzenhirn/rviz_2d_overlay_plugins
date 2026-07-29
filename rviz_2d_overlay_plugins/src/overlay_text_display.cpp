@@ -175,7 +175,7 @@ namespace rviz_2d_overlay_plugins {
         require_update_texture_ = true;
     }
 
-    void OverlayTextDisplay::update(std::chrono::nanoseconds /*wall_dt*/, std::chrono::nanoseconds /*ros_dt*/) {
+    void OverlayTextDisplay::update(Duration /*wall_dt*/, Duration /*ros_dt*/) {
         if (!require_update_texture_) {
             return;
         }
