@@ -4,8 +4,15 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
-    container: ros:jazzy
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ros_distro: [jazzy, kilted, lyrical, rolling]
+
+    container: ros:${{ matrix.ros_distro }}
+
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
