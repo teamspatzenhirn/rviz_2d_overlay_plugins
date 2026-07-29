@@ -1,0 +1,34 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ros_distro: [humble, jazzy, kilted, lyrical, rolling]
+
+    container: ros:${{ matrix.ros_distro }}
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Configure git checkout as safe directory to allow dubious permission-setup
+        run: git config --system --add safe.directory $GITHUB_WORKSPACE
+      - name: Install depdendencies
+        run: |
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          cd $GITHUB_WORKSPACE/..
+          apt update
+          rosdep update
+          rosdep install -y --from-paths rviz_2d_overlay_plugins
+      - name: Build
+        run: |
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          cd $GITHUB_WORKSPACE/..
+          colcon build --packages-select rviz_2d_overlay_plugins rviz_2d_overlay_msgs
