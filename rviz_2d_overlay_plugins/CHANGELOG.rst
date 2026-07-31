@@ -2,8 +2,8 @@
 Changelog for package rviz_2d_overlay_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.4.2 (2026-07-31)
+------------------
 * Fix Qt Widgets linkage for display plugins (`#28 <https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/28>`_)
 * Adaptions to change in method signature of update() (`#30 <https://github.com/teamspatzenhirn/rviz_2d_overlay_plugins/issues/30>`_)
   Distro specific handling of the two different signatures of the update function
