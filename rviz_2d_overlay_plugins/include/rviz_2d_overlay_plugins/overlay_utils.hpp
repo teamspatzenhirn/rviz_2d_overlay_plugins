@@ -54,6 +54,10 @@
 
 #include "rviz_2d_overlay_msgs/msg/overlay_text.hpp"
 
+namespace rviz_common {
+    class Display;
+}
+
 namespace rviz_2d_overlay_plugins {
     class OverlayObject;
 
@@ -94,6 +98,8 @@ namespace rviz_2d_overlay_plugins {
         using SharedPtr = std::shared_ptr<OverlayObject>;
 
         OverlayObject(const std::string &name);
+        // Associate the overlay with an RViz display for per-viewport visibility.
+        OverlayObject(const std::string &name, rviz_common::Display *display);
         virtual ~OverlayObject();
 
         virtual std::string getName() const;

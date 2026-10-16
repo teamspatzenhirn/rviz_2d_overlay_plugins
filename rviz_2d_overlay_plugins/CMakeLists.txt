@@ -22,6 +22,24 @@ find_package(rviz_rendering REQUIRED)
 find_package(rviz_ogre_vendor REQUIRED)
 find_package(std_msgs REQUIRED)
 
+# Older OGRE versions (including Humble's) cannot register custom overlays.
+include(CheckCXXSourceCompiles)
+include(CMakePushCheckState)
+cmake_push_check_state(RESET)
+set(CMAKE_REQUIRED_LIBRARIES rviz_ogre_vendor::OgreOverlay)
+check_cxx_source_compiles("
+    #include <Overlay/OgreOverlay.h>
+    #include <Overlay/OgreOverlayManager.h>
+    class CustomOverlay : public Ogre::Overlay {
+        void _findVisibleObjects(Ogre::Camera *, Ogre::RenderQueue *, Ogre::Viewport *) override {}
+    };
+    int main() {
+        Ogre::OverlayManager::getSingleton().addOverlay(nullptr);
+        return 0;
+    }
+" RVIZ_2D_OVERLAY_HAS_CUSTOM_OVERLAYS)
+cmake_pop_check_state()
+
 set(CMAKE_AUTOMOC ON)
 
 set(
@@ -69,6 +87,9 @@ target_link_libraries(
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
 target_compile_definitions(${PROJECT_NAME} PRIVATE "${PROJECT_NAME}_BUILDING_LIBRARY")
+if(RVIZ_2D_OVERLAY_HAS_CUSTOM_OVERLAYS)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE RVIZ_2D_OVERLAY_HAS_CUSTOM_OVERLAYS)
+endif()
 
 # prevent pluginlib from using boost
 target_compile_definitions(${PROJECT_NAME} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")

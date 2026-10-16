@@ -36,9 +36,32 @@
 
 #include <rviz_2d_overlay_plugins/overlay_utils.hpp>
 
+#include <OgreViewport.h>
+#include <rviz_common/display.hpp>
 #include <rviz_common/logging.hpp>
 
 namespace rviz_2d_overlay_plugins {
+#ifdef RVIZ_2D_OVERLAY_HAS_CUSTOM_OVERLAYS
+    namespace {
+        class DisplayOverlay : public Ogre::Overlay {
+          public:
+            DisplayOverlay(const std::string &name, rviz_common::Display *display)
+                : Ogre::Overlay(name), display_(display) {}
+
+            void _findVisibleObjects(Ogre::Camera *camera, Ogre::RenderQueue *queue,
+                                     Ogre::Viewport *viewport) override {
+                // RViz Camera views use a viewport mask; regular overlays ignore it.
+                if ((display_->getVisibilityBits() & viewport->getVisibilityMask()) != 0) {
+                    Ogre::Overlay::_findVisibleObjects(camera, queue, viewport);
+                }
+            }
+
+          private:
+            rviz_common::Display *display_;
+        };
+    } // namespace
+#endif
+
     ScopedPixelBuffer::ScopedPixelBuffer(Ogre::HardwarePixelBufferSharedPtr pixel_buffer) :
         pixel_buffer_(pixel_buffer) {
         pixel_buffer_->lock(Ogre::HardwareBuffer::HBL_NORMAL);
@@ -77,10 +100,23 @@ namespace rviz_2d_overlay_plugins {
         return getQImage(overlay.getTextureWidth(), overlay.getTextureHeight(), bg_color);
     }
 
-    OverlayObject::OverlayObject(const std::string &name) : name_(name) {
+    OverlayObject::OverlayObject(const std::string &name) : OverlayObject(name, nullptr) {}
+
+    OverlayObject::OverlayObject(const std::string &name, rviz_common::Display *display) : name_(name) {
         std::string material_name = name_ + "Material";
         Ogre::OverlayManager *mOverlayMgr = Ogre::OverlayManager::getSingletonPtr();
+#ifdef RVIZ_2D_OVERLAY_HAS_CUSTOM_OVERLAYS
+        if (display) {
+            auto display_overlay = std::make_unique<DisplayOverlay>(name_, display);
+            mOverlayMgr->addOverlay(display_overlay.get());
+            overlay_ = display_overlay.release();
+        } else {
+            overlay_ = mOverlayMgr->create(name_);
+        }
+#else
+        (void)display;
         overlay_ = mOverlayMgr->create(name_);
+#endif
         panel_ = static_cast<Ogre::PanelOverlayElement *>(mOverlayMgr->createOverlayElement("Panel", name_ + "Panel"));
         panel_->setMetricsMode(Ogre::GMM_PIXELS);
 

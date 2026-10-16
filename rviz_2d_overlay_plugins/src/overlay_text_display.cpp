@@ -269,7 +269,7 @@ namespace rviz_2d_overlay_plugins {
             static int count = 0;
             std::stringstream ss;
             ss << "OverlayTextDisplayObject" << count++;
-            overlay_.reset(new rviz_2d_overlay_plugins::OverlayObject(ss.str()));
+            overlay_.reset(new rviz_2d_overlay_plugins::OverlayObject(ss.str(), this));
             overlay_->show();
         }
         if (overlay_) {
