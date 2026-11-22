@@ -78,8 +78,11 @@ pluginlib_export_plugin_description_file(rviz_common plugins_description.xml)
 ament_export_include_directories(include)
 ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
 ament_export_dependencies(
+        rviz_2d_overlay_msgs
         rviz_common
         rviz_ogre_vendor
+        rviz_rendering
+        std_msgs
 )
 
 install(
